@@ -1,0 +1,8 @@
+#BlueJ class context
+comment0.params=based_on\ is_original
+comment0.target=character_info_frame(character_unit,\ boolean)
+comment1.params=event
+comment1.target=void\ actionPerformed(java.awt.event.ActionEvent)
+comment2.params=all_classes_dup
+comment2.target=void\ reset_classes(java.util.ArrayList)
+numComments=3
