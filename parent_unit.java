@@ -132,12 +132,12 @@ public abstract class parent_unit extends character_unit
                 
                 if (source.attached_to_parent.parent_of!=null){
                     source.attached_to_parent.parent_of.add_parent2(main_code.clicked_match);
-                    source.attached_to_parent.parent_of.flexable_parent_label.setText("Parent: "+main_code.clicked_match.name);
+                    source.attached_to_parent.parent_of.flexable_parent_label.setText("<html>Parent No.<br>1: "+source.attached_to_parent.name+"<br>2: "+main_code.clicked_match.name+"</html>");
                 }
                 
                 if (main_code.clicked_match.parent_of!=null){
                     main_code.clicked_match.parent_of.add_parent2(source.attached_to_parent);
-                    main_code.clicked_match.parent_of.flexable_parent_label.setText("Parent: "+source.attached_to_parent.name);
+                    main_code.clicked_match.parent_of.flexable_parent_label.setText("<html>Parent No.<br>1: "+main_code.clicked_match.name+"<br>2: "+source.attached_to_parent.name+"</html>");
                 }
                 
                 

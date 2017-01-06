@@ -145,7 +145,7 @@ public class main_code extends JFrame
         
         main_panel.add(open_match_button);
         
-        match_frame.setPreferredSize(new Dimension(1400, 280));
+        match_frame.setPreferredSize(new Dimension(1400, 400));
         match_frame.pack();
         
         

@@ -85,7 +85,7 @@ public class child_info_frame extends character_info_frame
         
         if (based_on.flexable_parent==null){
             parent2_label.setText("Secondary Parent: None");
-            based_on.flexable_parent_label.setText("Parent: None");
+            based_on.flexable_parent_label.setText("<html>Parent No.<br>1: "+based_on.constant_parent.name+"<br>2: None</html>");
         }
         
         //add unit_class from assigned parent_unit

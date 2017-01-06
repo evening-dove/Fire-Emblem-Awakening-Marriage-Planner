@@ -22,7 +22,7 @@ public class child extends character_unit
     parent_unit constant_parent;
     parent_unit flexable_parent;
     Char_Attached_JButton clear_parent_button;
-    JLabel flexable_parent_label=new JLabel("Parent: None");
+    JLabel flexable_parent_label=new JLabel("<html>Parent No.<br>1: ---<br>2: None</html>", SwingConstants.CENTER);
     
     
     //Initiates child()
