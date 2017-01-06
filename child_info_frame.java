@@ -12,6 +12,7 @@ public class child_info_frame extends character_info_frame
     
     JLabel parent1_label;
     JLabel parent2_label;
+    JLabel child1_label;
     
     JPanel inherit_main_panel=new JPanel(new FlowLayout());
     JPanel inherit_mother_panel=new JPanel(new BorderLayout());
@@ -39,6 +40,7 @@ public class child_info_frame extends character_info_frame
         name_label=new JLabel("Name: "+based_on.name, SwingConstants.CENTER);
         parent1_label=new JLabel("Main Parent: "+based_on.constant_parent.name, SwingConstants.CENTER);
         parent2_label=new JLabel("Secondary Parent: None", SwingConstants.CENTER);
+        child1_label=new JLabel("Secondary Parent: None", SwingConstants.CENTER);
         
         family_panel.add(name_label);
         family_panel.add(parent1_label);

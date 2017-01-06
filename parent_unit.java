@@ -66,11 +66,13 @@ public abstract class parent_unit extends character_unit
                     source.attached_to_parent.matched_with.parent_of.remove_parent2();
                     
                 }
-                
+                source.attached_to_parent.matched_with.info_frame.married_to_label.setText("Married to: None");
+                ((parent_info_frame)source.attached_to_parent.matched_with.info_frame).child1_label.setText("");
                 source.attached_to_parent.matched_with.matched_with=null;
                 
             }
             
+            source.attached_to_parent.info_frame.married_to_label.setText("Married to: None");
             source.attached_to_parent.matched_with=null;
             
             if (source.attached_to_parent.parent_of!=null){
@@ -124,6 +126,9 @@ public abstract class parent_unit extends character_unit
             if (source.getText()=="match"){
                 source.attached_to_parent.matched_with=main_code.clicked_match;
                 main_code.clicked_match.matched_with=source.attached_to_parent;
+                
+                source.attached_to_parent.info_frame.married_to_label.setText("Married to: "+main_code.clicked_match.name);
+                main_code.clicked_match.info_frame.married_to_label.setText("Married to: "+source.attached_to_parent.name);
                 
                 if (source.attached_to_parent.parent_of!=null){
                     source.attached_to_parent.parent_of.add_parent2(main_code.clicked_match);

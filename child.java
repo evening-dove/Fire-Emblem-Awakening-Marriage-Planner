@@ -87,18 +87,20 @@ public class child extends character_unit
         public void actionPerformed(ActionEvent event){
             
             Char_Attached_JButton source=(Char_Attached_JButton)event.getSource();
-            
             if (source.attached_to_child.flexable_parent!=null){
-                
                 if (source.attached_to_child.flexable_parent.parent_of!=null){
+                    ((parent_info_frame)source.attached_to_child.constant_parent.info_frame).child2_label.setText("");
                     source.attached_to_child.flexable_parent.parent_of.flexable_parent=null;
                     source.attached_to_child.flexable_parent.parent_of.flexable_parent_label.setText("Parent: None");
                 }
                 
+                source.attached_to_child.flexable_parent.info_frame.married_to_label.setText("Married to: None");
+                ((parent_info_frame)source.attached_to_child.flexable_parent.info_frame).child2_label.setText("");
                 source.attached_to_child.flexable_parent.matched_with=null;
                 source.attached_to_child.flexable_parent=null;
             }
             
+            source.attached_to_child.constant_parent.info_frame.married_to_label.setText("Married to: None");
             source.attached_to_child.constant_parent.matched_with=null;
             source.attached_to_child.flexable_parent_label.setText("Parent: None");
             source.attached_to_child.remove_parent2();
