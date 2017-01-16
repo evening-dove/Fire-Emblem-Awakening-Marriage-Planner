@@ -1,6 +1,0 @@
-#BlueJ class context
-comment0.params=based_on\ is_original
-comment0.target=child_info_frame(child,\ boolean)
-comment1.params=
-comment1.target=void\ reset_classes()
-numComments=2
