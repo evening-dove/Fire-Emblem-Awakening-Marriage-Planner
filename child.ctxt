@@ -1,8 +1,0 @@
-#BlueJ class context
-comment0.params=name\ is_female\ constant_parent
-comment0.target=child(java.lang.String,\ boolean,\ parent_unit)
-comment1.params=parent2
-comment1.target=void\ add_parent2(parent_unit)
-comment2.params=
-comment2.target=void\ remove_parent2()
-numComments=3
