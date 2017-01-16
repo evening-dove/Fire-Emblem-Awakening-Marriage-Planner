@@ -1,4 +1,0 @@
-#BlueJ class context
-comment0.params=name\ skill1\ skill1_info\ skill2\ skill2_info\ stats
-comment0.target=unit_class(java.lang.String,\ java.lang.String,\ java.lang.String,\ java.lang.String,\ java.lang.String,\ int[])
-numComments=1
