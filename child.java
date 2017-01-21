@@ -15,7 +15,6 @@ public class child extends character_unit
     
     static ArrayList<child> all_children=new ArrayList<child>();
     
-    Char_Attached_JButton info_button;
     child_review_panel review_panel;
     
     //variables related to parents
@@ -40,6 +39,9 @@ public class child extends character_unit
         //Builds UI
         info_button=new Char_Attached_JButton(this, name);
         info_button.addActionListener(new InfoButtonListener());
+        
+        on_team_info_button=new Char_Attached_JButton(this, name);
+        on_team_info_button.addActionListener(new InfoButtonListener());
         
         clear_parent_button=new Char_Attached_JButton(this, "Clear Parent");
         clear_parent_button.addActionListener(new ClearParentListener());
@@ -76,6 +78,13 @@ public class child extends character_unit
         
         ((child_info_frame)info_frame).reset_classes();
         
+        main_code.units_on_team.remove(this);
+        finished_frame.add_to_team_button.setText("Add to Team");
+        main_code.update_team();
+        
+        finished_frame.setVisible(false);
+        finished=false;
+        
         info_frame.pack();
         
     }
@@ -91,7 +100,7 @@ public class child extends character_unit
                 if (source.attached_to_child.flexable_parent.parent_of!=null){
                     ((parent_info_frame)source.attached_to_child.constant_parent.info_frame).child2_label.setText("");
                     source.attached_to_child.flexable_parent.parent_of.flexable_parent=null;
-                    source.attached_to_child.flexable_parent.parent_of.flexable_parent_label.setText("Parent: None");
+                    source.attached_to_child.flexable_parent.parent_of.remove_parent2();
                 }
                 
                 source.attached_to_child.flexable_parent.info_frame.married_to_label.setText("Married to: None");
@@ -102,7 +111,6 @@ public class child extends character_unit
             
             source.attached_to_child.constant_parent.info_frame.married_to_label.setText("Married to: None");
             source.attached_to_child.constant_parent.matched_with=null;
-            source.attached_to_child.flexable_parent_label.setText("Parent: None");
             source.attached_to_child.remove_parent2();
         }
     }

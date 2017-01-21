@@ -5,13 +5,13 @@ import java.awt.event.*;
 
 import java.util.*;
 
+
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.*;
 import java.util.List;
 
-
-import java.in.File;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 
@@ -107,13 +107,13 @@ public class child_review_panel extends JPanel
                         
                         ((JButton)event.getSource()).setText("Edit");
                         
-                        Path file=Paths.get("C:/Users/Bryan/Documents/java/fire_emblem_awakening_child_planner/match_reviews/"+based_on.name+"/"+current_father_name+".txt");
+                        Path file=Paths.get((new File("match_reviews/"+based_on.name+"/"+current_father_name)).getAbsolutePath()+".txt");
                         Charset text_file_charset=Charset.forName("ISO-8859-1");
                         
                         //Writes to the .txt file, if it exists.
                         try{
                             List<String> new_file_lines=Arrays.asList(text_for_file);
-                            Path new_file=Paths.get("C:/Users/Bryan/Documents/java/fire_emblem_awakening_child_planner/match_reviews/"+based_on.name+"/"+current_father_name+".txt");
+                            Path new_file=Paths.get((new File("match_reviews/"+based_on.name+"/"+current_father_name)).getAbsolutePath()+".txt");
                             Files.write(new_file, new_file_lines, text_file_charset);
                             
                         }
@@ -121,7 +121,6 @@ public class child_review_panel extends JPanel
                         catch (IOException e) {
                             System.out.println(e);
                         }
-                        
                     }
                         
                     temp_frame.pack();

@@ -9,7 +9,6 @@ public class child_info_frame extends character_info_frame
 {
     //A frame the displays information about a child. Displays thier skills, classes, and who they are related too.
     
-    
     JLabel parent1_label;
     JLabel parent2_label;
     JLabel child1_label;
@@ -22,7 +21,6 @@ public class child_info_frame extends character_info_frame
     
     child based_on;
     child_info_frame this_frame=this;
-    
     
     //Initiates child_info_frame()
     //Takes a boolean as a peramater, which is true if this is the first info_frame made for a child, or if this is a 
@@ -57,13 +55,8 @@ public class child_info_frame extends character_info_frame
         inherit_main_panel.add(inherit_father_panel);
         
         //creates the misc. UI options catagory
-        build_extras_panel.add(inherit_main_panel, BorderLayout.CENTER);
-        build_extras_panel.add(info_panel, BorderLayout.SOUTH);
-        
-        
-        if (is_original==true){
-            extra_options_panel.add(create_frame_copy_button);
-        }
+        build_bottom_panel.add(inherit_main_panel, BorderLayout.NORTH);
+        build_bottom_panel.add(info_panel, BorderLayout.SOUTH);
         
         
         reset_classes();
@@ -128,8 +121,6 @@ public class child_info_frame extends character_info_frame
             }
         
             if (based_on.flexable_parent==main_code.donnel){
-                all_classes_dup.remove(main_code.villager);
-                
                 all_classes_dup.add(main_code.troubadour);
                 all_classes_dup.add(main_code.valkyrie);
                 all_classes_dup.add(main_code.war_monk);
@@ -162,6 +153,10 @@ public class child_info_frame extends character_info_frame
                 all_classes_dup.add(main_code.valkyrie);
                 all_classes_dup.add(main_code.war_monk);
             }
+        }
+        
+        if (based_on.flexable_parent==main_code.donnel){
+            all_classes_dup.remove(main_code.villager);
         }
         
         if (based_on.is_female==false){
@@ -267,6 +262,9 @@ public class child_info_frame extends character_info_frame
         inherit_mother_skills_panel.removeAll();
         inherit_father_skills_panel.removeAll();
         
+        
+        //When recruted, a child will start with 1 skill from each parent_unit. This lets you decide which skills
+        //they will be. the father chrom does not follow this rule.
         if (based_on.constant_parent!=main_code.chrom){
             
             boolean added_skills=false;
@@ -291,7 +289,6 @@ public class child_info_frame extends character_info_frame
                     temp_skill2_panel.add(skill2_name_button, BorderLayout.CENTER);
                     temp_skill2_panel.add(skill2_info_button, BorderLayout.EAST);
                     
-                    
                     inherit_mother_skills_panel.add(temp_skill1_panel);
                     inherit_mother_skills_panel.add(temp_skill2_panel);
                     
@@ -306,8 +303,6 @@ public class child_info_frame extends character_info_frame
             
         }
         
-        //When recruted, a child will start with 1 skill from each parent_unit. This lets you decide which skills
-        //they will be. the father chrom does not follow this rule.
         if (based_on.flexable_parent!=null && based_on.flexable_parent!=main_code.chrom){
             
             boolean added_skills=false;

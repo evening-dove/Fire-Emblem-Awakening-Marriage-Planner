@@ -42,8 +42,9 @@ public abstract class character_info_frame extends JFrame
     JPanel skills_panel=new JPanel(new GridLayout(0,2,5,5));
     ArrayList<JPanel> skill_options=new ArrayList<JPanel>();
     
+    JPanel build_bottom_panel=new JPanel(new BorderLayout());
     
-    JPanel build_extras_panel=new JPanel(new BorderLayout());
+    JButton finalize_button=new JButton("Finalize");
     
     JPanel info_panel=new JPanel(new GridLayout(1,0));
     
@@ -87,7 +88,7 @@ public abstract class character_info_frame extends JFrame
         full_build_panel.add(classes_panel, BorderLayout.WEST);
         full_build_panel.add(selected_build_panel, BorderLayout.CENTER);
         full_build_panel.add(skills_panel, BorderLayout.EAST);
-        full_build_panel.add(build_extras_panel, BorderLayout.SOUTH);
+        full_build_panel.add(build_bottom_panel, BorderLayout.SOUTH);
         
         
         main_panel.add(full_build_panel, BorderLayout.CENTER);
@@ -167,13 +168,62 @@ public abstract class character_info_frame extends JFrame
                 }
             }
             );
+            
+            extra_options_panel.add(create_frame_copy_button);
+            
+            finalize_button.addActionListener(new ActionListener(){
+                public void actionPerformed(ActionEvent event){
+                    
+                    
+                    
+                    JButton source=(JButton)event.getSource();
+                    
+                    if (this_frame.based_on.is_parent==true || (this_frame.based_on.is_parent==false && ((child)this_frame.based_on).flexable_parent!=null)){
+                        if (this_frame.classes_to_become.size()==1){
+                            if (this_frame.skills_to_get.size()<=5){
+                                
+                                this_frame.based_on.finished_frame.comment_label.setText("");
+                                int add_comment=JOptionPane.showConfirmDialog(this_frame, "Would you like to add a short\ndescription for "+this_frame.based_on.name+"?");
+                                if (add_comment!=JOptionPane.CANCEL_OPTION && add_comment!=-1){
+                                    if (add_comment==JOptionPane.YES_OPTION){
+                                        String unit_comment=JOptionPane.showInputDialog("Please enter your comment.");
+                                        this_frame.based_on.finished_frame.comment_label.setText(unit_comment);
+                                    }
+                                
+                                
+                                    this_frame.based_on.finished=true;
+                                    
+                                    this_frame.based_on.finished_frame.update_frame();
+                                    
+                                    this_frame.based_on.finished_frame.setVisible(true);
+                                    this_frame.setVisible(false);
+                                }
+                            }
+                            else{
+                                JOptionPane.showMessageDialog(this_frame, "Invalid Request\n\nUnits can have a maximum\nof 5 skills.");
+                            }
+                        }
+                        else{
+                            JOptionPane.showMessageDialog(this_frame, "Invalid Request\n\nA unit must have exactly 1 class.");
+                        }
+                    }
+                    else{
+                        JOptionPane.showMessageDialog(this_frame, "Invalid Request\n\nChildren must have 2 parents before\nthey can be recruted. Please go\nback to the matching frame to give\nthis unit a mother or father.");
+                    }
+                }
+            }
+            );
+            extra_options_panel.add(finalize_button);
+            
         }
         
-        main_panel.add(extra_options_panel, BorderLayout.SOUTH);
+        build_bottom_panel.add(extra_options_panel, BorderLayout.CENTER);
+        build_bottom_panel.add(info_panel, BorderLayout.SOUTH);
+        
         
         add(main_panel);
         
-        setPreferredSize(new Dimension(1000, 800));
+        setPreferredSize(new Dimension(1050, 800));
         
         pack();
         
@@ -299,7 +349,7 @@ public abstract class character_info_frame extends JFrame
                 int[] stats_to_use=classes_to_become.get(i).stats;
                 
                 
-                if (classes_to_become.get(i).name=="great lord" && this_frame.based_on.name=="Lucina"){
+                if (classes_to_become.get(i)==main_code.great_lord && this_frame.based_on.name=="Lucina"){
                     stats_to_use=main_code.great_lord_f_stats;
                 }
                 
@@ -326,10 +376,13 @@ public abstract class character_info_frame extends JFrame
                     
                 }
                 
+                stats_text+=" Mov: "+stats_to_use[8];
+                
                 
                 this_frame.picked_stats_panel.add(new JLabel(stats_text, SwingConstants.CENTER));
             }
             
+            SwingUtilities.updateComponentTreeUI(this_frame);
             this_frame.pack();
         }
         
@@ -364,6 +417,7 @@ public abstract class character_info_frame extends JFrame
             
             info_panel.add(new JLabel(source.description));
             
+            SwingUtilities.updateComponentTreeUI(this_frame);
             this_frame.pack();
         }
         
@@ -391,6 +445,7 @@ public abstract class character_info_frame extends JFrame
                 this_frame.picked_skills_panel.add(new JLabel(skills_to_get.get(i), SwingConstants.CENTER));
             }
             
+            SwingUtilities.updateComponentTreeUI(this_frame);
             this_frame.pack();
         }
     }

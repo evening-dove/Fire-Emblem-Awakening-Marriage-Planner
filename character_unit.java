@@ -14,12 +14,16 @@ public abstract class character_unit
     String name;
     boolean is_female;
     boolean is_parent;
+    boolean finished=false;
     
-    
+    Char_Attached_JButton info_button;
+    Char_Attached_JButton on_team_info_button;
     
     JPanel buttons_panel=new JPanel(new BorderLayout());
     
     character_info_frame info_frame;
+    
+    finished_unit_frame finished_frame;
     
     
     //Initiates character_unit()
@@ -30,6 +34,8 @@ public abstract class character_unit
         this.name=name;
         this.is_female=is_female;
         this.is_parent=is_parent;
+        
+        finished_frame=new finished_unit_frame(this);
     }
     
     //Button that lets you open up a unit's info frame. (The buttons with names on them)
@@ -71,8 +77,12 @@ public abstract class character_unit
         public void actionPerformed(ActionEvent event){
             
             Char_Attached_JButton source=(Char_Attached_JButton)event.getSource();
-            
-            source.attached_to.info_frame.setVisible(true);
+            if (source.attached_to.finished==false){
+                source.attached_to.info_frame.setVisible(true);
+            }
+            else{
+                source.attached_to.finished_frame.setVisible(true);
+            }
         }
     }
 }

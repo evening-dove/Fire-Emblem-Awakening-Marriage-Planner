@@ -37,11 +37,7 @@ public class parent_info_frame extends character_info_frame
         family_panel.add(name_label);
         family_panel.add(married_to_label);
         
-        build_extras_panel.add(info_panel, BorderLayout.SOUTH);
         
-        if (is_original==true){
-            extra_options_panel.add(create_frame_copy_button);
-        }
         
         
         if (based_on.is_female==true || based_on.name=="Chrom"){

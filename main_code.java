@@ -9,66 +9,69 @@ import java.util.*;
 public class main_code extends JFrame
 {
     
-    JPanel main_panel=new JPanel(new FlowLayout());
+    private main_code this_frame=this;
     
+    static JPanel main_panel=new JPanel(new FlowLayout());
     
-    JButton open_match_button=new JButton("Matching");
-    JButton open_review_button=new JButton("Review");
-    JButton open_match_review_button=new JButton("Both");
+    static JButton back_button=new JButton("Back");
+    static String current_menu="main";
     
+    static JButton open_plan_button=new JButton("Plan");
+    static JButton open_review_button=new JButton("Review");
     
+    static JButton open_match_button=new JButton("Match");
+    static JButton open_team_button=new JButton("Team");
     
-    
-    JFrame match_frame=new JFrame();
+    static JFrame match_frame=new JFrame();
     
     //Initiate all classes
-    static String[] stat_names=new String[] {"HP: ", "Str: ", "Mag: ", "Skl: ", "Spd: ", "Lck: ", "Def: ", "Res: "};
+    static String[] stat_names=new String[] {"HP: ", "Str: ", "Mag: ", "Skl: ", "Spd: ", "Lck: ", "Def: ", "Res: ", "Mov: "};
     
-    static int[] great_lord_f_stats=new int[] {80, 40, 30, 42, 44, 45, 40, 40};
+    static int[] great_lord_f_stats=new int[] {80, 40, 30, 42, 44, 45, 40, 40, 6};
     
-    static unit_class great_lord=new unit_class("great lord", "Aether", "Attack twice consecutively, with the first strike having a Sol effect and the second strike having a Luna effect. Activation Rate = (Skill/2)%", "Rightful King", "Adds 10% to Skill activation rates", new int[] {80, 43, 30, 40, 41, 45, 42, 40});
-    static unit_class lord=new unit_class("lord", "Dual Strike+", "Adds 10% to Dual Strike activation", "Charm", "Hit rate and Avoid +5 to all allies within a 3 tile radius", new int[] {60, 25, 20, 26, 28, 30, 25, 25});
-    static unit_class tactician=new unit_class("tactician", "Veteran", "x1.5 experience gain when in Pair Up", "Solidarity", "Critical and Critical Avoid +10 to adjacent allies", new int[] {60, 25, 25, 25, 25, 30, 25, 25});
-    static unit_class cavalier=new unit_class("cavalier", "Discipline", "Weapon Experience x2", "Outdoor Fighter", "Hit rate and Avoid +10 when fighting outdoors", new int[] {60, 26, 20, 25, 25, 30, 26, 26});
-    static unit_class knight=new unit_class("knight", "Defense +2", "Defense +2", "Indoor Fighter", "Hit rate and Avoid +10 when fighting indoors", new int[] {60, 30, 20, 26, 23, 30, 30, 22});
-    static unit_class myrmidon=new unit_class("myrmidon", "Avoid +10", "Avoid +10", "Vantage", "Strike first during an enemy attack when HP is under half", new int[] {60, 24, 22, 27, 28, 30, 22, 24});
-    static unit_class mercenary=new unit_class("mercenary", "Armsthrift", "Weapon durability is not decreased when activated. Activation Rate = (Luck x2)%", "Patience", "Hit Rate and Avoid +10 during the enemy's Turn", new int[] {60, 26, 20, 28, 26, 30, 25, 23});
-    static unit_class fighter=new unit_class("fighter", "HP +5", "Maximum HP +5", "Zeal", "Critical +5", new int[] {60, 29, 20, 26, 25, 30, 25, 23});
-    static unit_class barbarian=new unit_class("barbarian", "Despoil", "Obtain a Bullion (S) from the enemy if the user defeats the enemy. Activation Rate = (Luck)%", "Gamble", "Hit rate -5, Critical +10", new int[] {60, 30, 20, 23, 27, 30, 22, 20});
-    static unit_class archer=new unit_class("archer", "Skill +2", "Skill +2", "Prescience", "Hit rate and Avoid +15 during the user's Turn", new int[] {60, 26, 20, 29, 25, 30, 25, 21});
-    static unit_class thief=new unit_class("thief", "Locktouch", "Unlock chests and doors without needing keys", "Movement +1", "Movement +1", new int[] {60, 22, 20, 30, 28, 30, 21, 20});
-    static unit_class pegasus_knight=new unit_class("pegasus knight", "Speed +2", "Speed +2", "Relief", "Recover 20% HP at the start of the user's Turn if there are no units within a 3 tile radius", new int[] {60, 24, 23, 28, 27, 30, 22, 25});
-    static unit_class wyvern_rider=new unit_class("wyvern rider", "Strength +2", "Strength +2", "Tantivy", "Hit rate and Avoid +10 if no allies within a 3 tile radius.", new int[] {60, 28, 20, 24, 24, 30, 28, 20});
-    static unit_class mage=new unit_class("mage", "Magic +2", "Magic +2", "Focus", "Critical +10 when no allies are within a 3 tile radius", new int[] {60, 20, 28, 27, 26, 30, 21, 25});
-    static unit_class dark_mage=new unit_class("dark mage", "Hex", "Avoid -15 to all adjacent enemies", "Anathema", "Avoid and Critical Avoid -10 to all enemies within a 3 tile radius.", new int[] {60, 20, 27, 25, 25, 30, 25, 27});
-    static unit_class priest=new unit_class("priest", "Miracle", "Character survives with 1 HP after receiving a fatal blow. (Must have at least 2 HP or more to activate.)  Activation Rate = (Luck)%", "Healtouch", "Restores an extra 5 HP when healing allies", new int[] {60, 22, 25, 24, 25, 30, 22, 27});
-    static unit_class troubadour=new unit_class("troubadour", "Resistance +2", "Resistance +2", "Demoiselle", "Avoid and Critical Avoid +10 to all male allies within a 3 tile radius", new int[] {60, 20, 26, 24, 26, 30, 20, 28});
-    static unit_class grandmaster=new unit_class("grandmaster", "Ignis", "Adds (Magic)/2 to Strength when dealing physical damage and (Strength)/2 to Magic when dealing magical damage. Activation Rate = (Skill)%", "Rally Spectrum", "All stats (except movement) +4 to all allies within a 3 tile radius for one Turn", new int[] {80, 40, 40, 40, 40, 45, 40, 40});
-    static unit_class paladin=new unit_class("paladin", "Defender", "All Stats (except movement) +1 when in a pair up", "Aegis", "Halves damage from bows, tomes, and Dragonstones. Activation Rate = (Skill)%", new int[] {80, 42, 30, 40, 40, 45, 42, 42});
-    static unit_class great_knight=new unit_class("great knight", "Luna", "Ignores half of the enemy's Defense or Resistance. Activation Rate = (Skill)%", "Dual Guard+", "Adds 10% to Dual Guard rate", new int[] {80, 48, 20, 34, 37, 45, 48, 30});
-    static unit_class general=new unit_class("general", "Rally Defense", "Defense +4 to all allies within a 3 tile radius for one Turn", "Pavise", "Halves damage from swords, lances, axes (including their magical variants), and Beaststones. Activation Rate = (Skill)%", new int[] {80, 50, 30, 41, 35, 45, 50, 35});
-    static unit_class swordmaster=new unit_class("swordmaster", "Astra", "Deals 5 consecutive hits at half damage. Activation Rate = (Skill/2)%", "Swordfaire", "Strength +5 when equipped with a sword. Magic +5 when equipped with a Levin Sword", new int[] {80, 38, 34, 44, 46, 45, 33, 38});
-    static unit_class hero=new unit_class("hero", "Sol", "Recover HP equal to half the damage dealt to the enemy. Activation Rate = (Skill)%", "Axebreaker", "Hit rate and Avoid +50 when enemy is equipped with an axe", new int[] {80, 42, 30, 46, 42, 45, 40, 36});
-    static unit_class warrior=new unit_class("warrior", "Rally Strength", "Strength +4 to all allies within a 3 tile radius for one turn", "Counter", "Returns damage when attacked by an adjacent enemy (does not return damage when user is KO'd)", new int[] {80, 48, 30, 42, 40, 45, 40, 35});
-    static unit_class berserker=new unit_class("berserker", "Wrath", "Critical +20 when under half HP", "Axefaire", "Strength +5 when equipped with an axe. Magic +5 when equipped with a Bolt Axe", new int[] {80, 50, 30, 35, 44, 45, 34, 30});
-    static unit_class sniper=new unit_class("sniper", "Hit Rate +20", "Hit Rate +20", "Bowfaire", "Strength +5 when equipped with a bow.", new int[] {80, 41, 30, 48, 40, 45, 40, 31});
-    static unit_class bow_knight=new unit_class("bow knight", "Rally Skill", "Skill +4 to all allies within a 3 tile radius for one Turn", "Bowbreaker", "Hit rate and Avoid +50 when the enemy is equipped with a bow.", new int[] {80, 40, 30, 43, 41, 45, 35, 30});
-    static unit_class assassin=new unit_class("assassin", "Lethality", "Instantly defeats the enemy. Activation Rate = (Skill/4)%", "Pass", "User can move through tiles occupied by an enemy unit", new int[] {80, 40, 30, 48, 46, 45, 31, 30});
-    static unit_class trickster=new unit_class("trickster", "Lucky Seven", "Hit rate and Avoid +20 for the first 7 Turns of a map.", "Acrobat", "All traversable terrain costs 1 movement point to cross", new int[] {80, 35, 38, 45, 43, 45, 30, 40});
-    static unit_class falcon_knight=new unit_class("falcon knight", "Rally Speed", "Speed +4 to all allies within a 3 tile radius for one Turn", "Lancefaire", "Strength +5 when equipped with a lance. Magic +5 when equipped with a Shockstick", new int[] {80, 38, 35, 45, 44, 45, 33, 40});
-    static unit_class dark_flier=new unit_class("dark flier", "Rally Movement", "Movement +1 to all allies within a 3 tile radius for one Turn", "Galeforce", "Allows the user another full action after they defeat an enemy during the user's Turn. Activates only once per Turn.", new int[] {80, 36, 42, 41, 42, 45, 32, 41});
-    static unit_class wyvern_lord=new unit_class("wyvern lord", "Quick Burn", "Hit rate and Avoid +15 at the start of a chapter. Effect decreases by 1 with each passing turn.", "Swordbreaker", "Hit rate and Avoid +50 when the enemy is equipped with a sword", new int[] {80, 46, 30, 38, 38, 45, 46, 30});
-    static unit_class griffon_rider=new unit_class("griffon rider", "Deliverer", "Movement +2 when in a Pair Up", "Lancebreaker", "Hit rate and Avoid +50 when the enemy is equipped with a lance", new int[] {80, 40, 30, 43, 41, 45, 40, 30});
-    static unit_class sage=new unit_class("sage", "Rally Magic", "Magic +4 to all alies within a 3 tile radius for one Turn", "Tomefaire", "Magic +5 when equipped with a tome", new int[] {80, 30, 46, 43, 42, 45, 31, 40});
-    static unit_class sorcerer=new unit_class("sorcerer", "Vengeance", "Adds half of the user's current accrued damage to user's attack. Activation Rate = (Skill x2)%", "Tomebreaker", "Hit rate and Avoid +50 when enemy is equipped with a tome", new int[] {80, 30, 44, 38, 40, 45, 41, 44});
-    static unit_class dark_knight=new unit_class("dark knight", "Slow Burn", "Hit rate and Avoid increases by 1 each Turn up to the 15th turn", "Lifetaker", "User recovers 50% Max HP after they defeat an enemy during the user's Turn.", new int[] {80, 38, 41, 40, 40, 45, 42, 38});
-    static unit_class war_monk=new unit_class("war monk", "Rally Luck", "Luck +8 to all allies within a 3 tile radius for one Turn", "Renewal", "Recover 30% HP at the start of the user's Turn", new int[] {80, 40, 40, 38, 41, 45, 38, 43});
-    static unit_class valkyrie=new unit_class("valkyrie", "Rally Resistance", "Resistance +4 to all allies within a 3 tile radius for one Turn", "Dual Support+", "Increases the Dual Support level of a unit by 4", new int[] {80, 30, 42, 38, 43, 45, 30, 45});
-    static unit_class villager=new unit_class("villager", "Aptitude", "Adds 20% to all growth rates during Level Ups", "Underdog", "Hit rate and Avoid +15 when user's Level is lower than the enemy (promoted units count as Level +20)    ", new int[] {60, 20, 20, 20, 20, 30, 20, 20});
-    static unit_class dancer=new unit_class("dancer", "Luck +4", "Luck +4", "Special Dance", "Strength, Magic, Defence and Resistance +2 for one Turn for the unit who receives the user's Dance", new int[] {80, 30, 30, 40, 40, 45, 30, 30});
-    static unit_class taguel=new unit_class("taguel", "Even Rhythm", "Hit rate and Avoid +10 during even numbered Turns", "Beastbane", "Deals effective damage to Beast (beast *3) units when user is a Taguel", new int[] {80, 35, 30, 40, 40, 45, 35, 30});
-    static unit_class manakete=new unit_class("manakete", "Odd Rhythm", "Hit rate and Avoid +10 during odd numbered Turns", "Wyrmsbane", "Deals effective damage to Dragon (dragon) units when user is a Manakete", new int[] {80, 40, 35, 35, 35, 45, 40, 40});
-    
+    static unit_class great_lord=new unit_class("Great Lord", "Aether", "Attack twice consecutively, with the first strike having a Sol effect and the second strike having a Luna effect. Activation Rate = (Skill/2)%", "Rightful King", "Adds 10% to Skill activation rates", new int[] {80, 43, 30, 40, 41, 45, 42, 40, 6});
+    static unit_class lord=new unit_class("Lord", "Dual Strike+", "Adds 10% to Dual Strike activation", "Charm", "Hit rate and Avoid +5 to all allies within a 3 tile radius", new int[] {60, 25, 20, 26, 28, 30, 25, 25, 5});
+    static unit_class tactician=new unit_class("Tactician", "Veteran", "x1.5 experience gain when in Pair Up", "Solidarity", "Critical and Critical Avoid +10 to adjacent allies", new int[] {60, 25, 25, 25, 25, 30, 25, 25, 5});
+    static unit_class cavalier=new unit_class("Cavalier", "Discipline", "Weapon Experience x2", "Outdoor Fighter", "Hit rate and Avoid +10 when fighting outdoors", new int[] {60, 26, 20, 25, 25, 30, 26, 26, 7});
+    static unit_class knight=new unit_class("Knight", "Defense +2", "Defense +2", "Indoor Fighter", "Hit rate and Avoid +10 when fighting indoors", new int[] {60, 30, 20, 26, 23, 30, 30, 22, 4});
+    static unit_class myrmidon=new unit_class("Myrmidon", "Avoid +10", "Avoid +10", "Vantage", "Strike first during an enemy attack when HP is under half", new int[] {60, 24, 22, 27, 28, 30, 22, 24, 5});
+    static unit_class mercenary=new unit_class("Mercenary", "Armsthrift", "Weapon durability is not decreased when activated. Activation Rate = (Luck x2)%", "Patience", "Hit Rate and Avoid +10 during the enemy's Turn", new int[] {60, 26, 20, 28, 26, 30, 25, 23, 5});
+    static unit_class fighter=new unit_class("Fighter", "HP +5", "Maximum HP +5", "Zeal", "Critical +5", new int[] {60, 29, 20, 26, 25, 30, 25, 23, 5});
+    static unit_class barbarian=new unit_class("Barbarian", "Despoil", "Obtain a Bullion (S) from the enemy if the user defeats the enemy. Activation Rate = (Luck)%", "Gamble", "Hit rate -5, Critical +10", new int[] {60, 30, 20, 23, 27, 30, 22, 20, 5});
+    static unit_class archer=new unit_class("Archer", "Skill +2", "Skill +2", "Prescience", "Hit rate and Avoid +15 during the user's Turn", new int[] {60, 26, 20, 29, 25, 30, 25, 21, 5});
+    static unit_class thief=new unit_class("Thief", "Locktouch", "Unlock chests and doors without needing keys", "Movement +1", "Movement +1", new int[] {60, 22, 20, 30, 28, 30, 21, 20, 5});
+    static unit_class pegasus_knight=new unit_class("Pegasus Knight", "Speed +2", "GSpeed +2", "Relief", "Recover 20% HP at the start of the user's Turn if there are no units within a 3 tile radius", new int[] {60, 24, 23, 28, 27, 30, 22, 25, 7});
+    static unit_class wyvern_rider=new unit_class("Wyvern Rider", "Strength +2", "Strength +2", "Tantivy", "Hit rate and Avoid +10 if no allies within a 3 tile radius.", new int[] {60, 28, 20, 24, 24, 30, 28, 20, 7});
+    static unit_class mage=new unit_class("Mage", "Magic +2", "Magic +2", "Focus", "Critical +10 when no allies are within a 3 tile radius", new int[] {60, 20, 28, 27, 26, 30, 21, 25, 5});
+    static unit_class dark_mage=new unit_class("Dark Mage", "Hex", "Avoid -15 to all adjacent enemies", "Anathema", "Avoid and Critical Avoid -10 to all enemies within a 3 tile radius.", new int[] {60, 20, 27, 25, 25, 30, 25, 27, 5});
+    static unit_class priest=new unit_class("Priest", "Miracle", "Character survives with 1 HP after receiving a fatal blow. (Must have at least 2 HP or more to activate.)  Activation Rate = (Luck)%", "Healtouch", "Restores an extra 5 HP when healing allies", new int[] {60, 22, 25, 24, 25, 30, 22, 27, 5});
+    static unit_class troubadour=new unit_class("Troubadour", "Resistance +2", "Resistance +2", "Demoiselle", "Avoid and Critical Avoid +10 to all male allies within a 3 tile radius", new int[] {60, 20, 26, 24, 26, 30, 20, 28, 7});
+    static unit_class grandmaster=new unit_class("Grandmaster", "Ignis", "Adds (Magic)/2 to Strength when dealing physical damage and (Strength)/2 to Magic when dealing magical damage. Activation Rate = (Skill)%", "Rally Spectrum", "All stats (except movement) +4 to all allies within a 3 tile radius for one Turn", new int[] {80, 40, 40, 40, 40, 45, 40, 40, 6});
+    static unit_class paladin=new unit_class("Paladin", "Defender", "All Stats (except movement) +1 when in a pair up", "Aegis", "Halves damage from bows, tomes, and Dragonstones. Activation Rate = (Skill)%", new int[] {80, 42, 30, 40, 40, 45, 42, 42, 8});
+    static unit_class great_knight=new unit_class("Great Knight", "Luna", "Ignores half of the enemy's Defense or Resistance when attacking. Activation Rate = (Skill)%", "Dual Guard+", "Adds 10% to Dual Guard rate", new int[] {80, 48, 20, 34, 37, 45, 48, 30, 7});
+    static unit_class general=new unit_class("General", "Rally Defense", "Defense +4 to all allies within a 3 tile radius for one Turn", "Pavise", "Halves damage from swords, lances, axes (including their magical variants), and Beaststones. Activation Rate = (Skill)%", new int[] {80, 50, 30, 41, 35, 45, 50, 35, 5});
+    static unit_class swordmaster=new unit_class("Swordmaster", "Astra", "Deals 5 consecutive hits at half damage. Activation Rate = (Skill/2)%", "Swordfaire", "Strength +5 when equipped with a sword. Magic +5 when equipped with a Levin Sword", new int[] {80, 38, 34, 44, 46, 45, 33, 38, 6});
+    static unit_class hero=new unit_class("Hero", "Sol", "Recover HP equal to half the damage dealt to the enemy. Activation Rate = (Skill)%", "Axebreaker", "Hit rate and Avoid +50 when enemy is equipped with an axe", new int[] {80, 42, 30, 46, 42, 45, 40, 36, 6});
+    static unit_class warrior=new unit_class("Warrior", "Rally Strength", "Strength +4 to all allies within a 3 tile radius for one turn", "Counter", "Returns damage when attacked by an adjacent enemy (does not return damage when user is KO'd)", new int[] {80, 48, 30, 42, 40, 45, 40, 35, 6});
+    static unit_class berserker=new unit_class("Berserker", "Wrath", "Critical +20 when under half HP", "Axefaire", "Strength +5 when equipped with an axe. Magic +5 when equipped with a Bolt Axe", new int[] {80, 50, 30, 35, 44, 45, 34, 30, 6});
+    static unit_class sniper=new unit_class("Sniper", "Hit Rate +20", "Hit Rate +20", "Bowfaire", "Strength +5 when equipped with a bow.", new int[] {80, 41, 30, 48, 40, 45, 40, 31, 6});
+    static unit_class bow_knight=new unit_class("Bow Knight", "Rally Skill", "Skill +4 to all allies within a 3 tile radius for one Turn", "Bowbreaker", "Hit rate and Avoid +50 when the enemy is equipped with a bow.", new int[] {80, 40, 30, 43, 41, 45, 35, 30, 8});
+    static unit_class assassin=new unit_class("Assassin", "Lethality", "Instantly defeats the enemy when attacking. Activation Rate = (Skill/4)%", "Pass", "User can move through tiles occupied by an enemy unit", new int[] {80, 40, 30, 48, 46, 45, 31, 30, 6});
+    static unit_class trickster=new unit_class("Trickster", "Lucky Seven", "Hit rate and Avoid +20 for the first 7 Turns of a map.", "Acrobat", "All traversable terrain costs 1 movement point to cross", new int[] {80, 35, 38, 45, 43, 45, 30, 40, 6});
+    static unit_class falcon_knight=new unit_class("Falcon Knight", "Rally Speed", "Speed +4 to all allies within a 3 tile radius for one Turn", "Lancefaire", "Strength +5 when equipped with a lance. Magic +5 when equipped with a Shockstick", new int[] {80, 38, 35, 45, 44, 45, 33, 40, 8});
+    static unit_class dark_flier=new unit_class("Dark Flier", "Rally Movement", "Movement +1 to all allies within a 3 tile radius for one Turn", "Galeforce", "Allows the user another full action after they defeat an enemy during the user's Turn. Activates only once per Turn.", new int[] {80, 36, 42, 41, 42, 45, 32, 41, 8});
+    static unit_class wyvern_lord=new unit_class("Wyvern Lord", "Quick Burn", "Hit rate and Avoid +15 at the start of a chapter. Effect decreases by 1 with each passing turn.", "Swordbreaker", "Hit rate and Avoid +50 when the enemy is equipped with a sword", new int[] {80, 46, 30, 38, 38, 45, 46, 30, 8});
+    static unit_class griffon_rider=new unit_class("Griffon Rider", "Deliverer", "Movement +2 when in a Pair Up", "Lancebreaker", "Hit rate and Avoid +50 when the enemy is equipped with a lance", new int[] {80, 40, 30, 43, 41, 45, 40, 30, 8});
+    static unit_class sage=new unit_class("Sage", "Rally Magic", "Magic +4 to all alies within a 3 tile radius for one Turn", "Tomefaire", "Magic +5 when equipped with a tome", new int[] {80, 30, 46, 43, 42, 45, 31, 40, 6});
+    static unit_class sorcerer=new unit_class("Sorcerer", "Vengeance", "Adds half of the user's current accrued damage to user's attack. Activation Rate = (Skill x2)%", "Tomebreaker", "Hit rate and Avoid +50 when enemy is equipped with a tome", new int[] {80, 30, 44, 38, 40, 45, 41, 44, 6});
+    static unit_class dark_knight=new unit_class("Dark Knight", "Slow Burn", "Hit rate and Avoid increases by 1 each Turn up to the 15th turn", "Lifetaker", "User recovers 50% Max HP after they defeat an enemy during the user's Turn.", new int[] {80, 38, 41, 40, 40, 45, 42, 38, 8});
+    static unit_class war_monk=new unit_class("War Monk", "Rally Luck", "Luck +8 to all allies within a 3 tile radius for one Turn", "Renewal", "Recover 30% HP at the start of the user's Turn", new int[] {80, 40, 40, 38, 41, 45, 38, 43, 6});
+    static unit_class valkyrie=new unit_class("Valkyrie", "Rally Resistance", "Resistance +4 to all allies within a 3 tile radius for one Turn", "Dual Support+", "Increases the Dual Support level of a unit by 4", new int[] {80, 30, 42, 38, 43, 45, 30, 45, 8});
+    static unit_class villager=new unit_class("Villager", "Aptitude", "Adds 20% to all growth rates during Level Ups", "Underdog", "Hit rate and Avoid +15 when user's Level is lower than the enemy (promoted units count as Level +20)	", new int[] {60, 20, 20, 20, 20, 30, 20, 20, 5});
+    static unit_class dancer=new unit_class("Dancer", "Luck +4", "Luck +4", "Special Dance", "Strength, Magic, Defence and Resistance +2 for one Turn for the unit who receives the user's Dance", new int[] {80, 30, 30, 40, 40, 45, 30, 30, 5});
+    static unit_class taguel=new unit_class("Taguel", "Even Rhythm", "Hit rate and Avoid +10 during even numbered Turns", "Beastbane", "Deals effective damage to Beast (beast *3) units when user is a Taguel", new int[] {80, 35, 30, 40, 40, 45, 35, 30, 6});
+    static unit_class manakete=new unit_class("Manakete", "Odd Rhythm", "Hit rate and Avoid +10 during odd numbered Turns", "Wyrmsbane", "Deals effective damage to Dragon (dragon) units when user is a Manakete", new int[] {80, 40, 35, 35, 35, 45, 40, 40, 6});
+
     //Initiate all parents
     static father chrom=new father("Chrom", new unit_class[] {lord, great_lord, archer, sniper, bow_knight, cavalier, paladin, great_knight}, new int[] {1, 0, 1, 1, 1, -1, -1});
     static mother lissa=new mother("Lissa", new unit_class[] {troubadour, valkyrie, war_monk, priest, sage, pegasus_knight, falcon_knight, dark_flier}, new int[] {-2, 2, -1, 0, 2, -1, 1});
@@ -96,34 +99,43 @@ public class main_code extends JFrame
     static father henry=new father("Henry", new unit_class[] {barbarian, berserker, warrior, dark_mage, sorcerer, dark_knight, thief, assassin, trickster}, new int[] {1, 1, 2, 0, -2, 1, -1});
 
     //Initiate all children
-    child lucina=new child("Lucina", true, chrom);
-    child owain=new child("Owain", false, lissa);
-    child kjelle=new child("Kjelle", true, sully);
-    child laurent=new child("Laurent", false, miriel);
-    child cynthia=new child("Cynthia", true, sumia);
-    child brady=new child("Brady", false, maribelle);
-    child yarne=new child("Yarne", false, panne);
-    child severa=new child("Severa", true, cordelia);
-    child nah=new child("Nah", true, nowi);
-    child noire=new child("Noire", true, tharja);
-    child inigo=new child("Inigo", false, olivia);
-    child gerome=new child("Gerome", false, cherche);
+    static child lucina=new child("Lucina", true, chrom);
+    static child owain=new child("Owain", false, lissa);
+    static child kjelle=new child("Kjelle", true, sully);
+    static child laurent=new child("Laurent", false, miriel);
+    static child cynthia=new child("Cynthia", true, sumia);
+    static child brady=new child("Brady", false, maribelle);
+    static child yarne=new child("Yarne", false, panne);
+    static child severa=new child("Severa", true, cordelia);
+    static child nah=new child("Nah", true, nowi);
+    static child noire=new child("Noire", true, tharja);
+    static child inigo=new child("Inigo", false, olivia);
+    static child gerome=new child("Gerome", false, cherche);
     
     //Build the UI variables
-    JPanel main_match_panel=new JPanel(new BorderLayout());
+    static JPanel main_match_panel=new JPanel(new BorderLayout());
     
-    JPanel parent_panel=new JPanel(new BorderLayout());
+    static JPanel parent_panel=new JPanel(new BorderLayout());
     
-    JPanel father_panel=new JPanel(new FlowLayout());
-    JPanel mother_panel=new JPanel(new FlowLayout());
-    JPanel child_panel=new JPanel(new FlowLayout());
+    static JPanel father_panel=new JPanel(new FlowLayout());
+    static JPanel mother_panel=new JPanel(new FlowLayout());
+    static JPanel child_panel=new JPanel(new FlowLayout());
     
     Matchable_Picture match_panel=new Matchable_Picture();
     
     public static parent_unit clicked_match;
     
-    JFrame review_frame=new JFrame();
-    JPanel main_review_panel=new JPanel(new GridLayout(0,1,5,5));
+    
+    static JFrame team_frame=new JFrame();
+    static JPanel team_panel=new JPanel(new BorderLayout());
+    
+    static JLabel team_progress_label=new JLabel("Current Team: (0/15)", SwingConstants.CENTER);
+    static ArrayList<character_unit> units_on_team=new ArrayList<character_unit>();
+    
+    static JPanel team_list_panel=new JPanel(new GridBagLayout());
+    
+    static JFrame review_frame=new JFrame();
+    static JPanel main_review_panel=new JPanel(new GridLayout(0,1,5,5));
 
     
     
@@ -133,21 +145,38 @@ public class main_code extends JFrame
         
         super();
         
-        //anonymous listener for if the user opens up the matching menu
-        open_match_button.addActionListener(new ActionListener(){
+        //anonymous listener for the back button
+        back_button.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent event){
-                if (match_frame.isVisible()==false){
-                    match_frame.setVisible(true);
+                if (current_menu=="planning"){
+                    this_frame.current_menu="main";
+                    this_frame.main_panel.removeAll();
+                    this_frame.main_panel.add(open_plan_button);
+                    this_frame.main_panel.add(open_review_button);
+                    
+                    SwingUtilities.updateComponentTreeUI(this_frame);
+                    this_frame.pack();
                 }
         }
         }
         );
         
-        main_panel.add(open_match_button);
+        //anonymous listener for if the user opens up the planning menu
+        open_plan_button.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent event){
+                this_frame.current_menu="planning";
+                this_frame.main_panel.removeAll();
+                this_frame.main_panel.add(open_match_button);
+                this_frame.main_panel.add(open_team_button);
+                this_frame.main_panel.add(back_button);
+                
+                SwingUtilities.updateComponentTreeUI(this_frame);
+                this_frame.pack();
+        }
+        }
+        );
         
-        match_frame.setPreferredSize(new Dimension(1400, 400));
-        match_frame.pack();
-        
+        main_panel.add(open_plan_button);
         
         //anonymous listener for if the user opens up the review menu
         open_review_button.addActionListener(new ActionListener(){
@@ -164,23 +193,23 @@ public class main_code extends JFrame
         review_frame.setPreferredSize(new Dimension(1000, 1000));
         review_frame.pack();
         
+        add(main_panel);
         
-        //anonymous listener for if the user opens up the matching and review menu
-        open_match_review_button.addActionListener(new ActionListener(){
+        
+        //Creates everything for the matching menu
+        
+        //anonymous listener for if the user opens up the matching menu
+        open_match_button.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent event){
-                if (match_frame.isVisible()==false || review_frame.isVisible()==false){
+                if (match_frame.isVisible()==false){
                     match_frame.setVisible(true);
-                    review_frame.setVisible(true);
                 }
         }
         }
         );
         
-        main_panel.add(open_match_review_button);
-        
-        
-        
-        add(main_panel);
+        match_frame.setPreferredSize(new Dimension(1400, 400));
+        match_frame.pack();
         
         //Creates the UI for the matching menu
         for (int i=0; i<father.all_fathers.size(); i++){
@@ -195,7 +224,6 @@ public class main_code extends JFrame
             child_panel.add(child.all_children.get(i).buttons_panel);
         }
         
-        
         main_match_panel.add(parent_panel, BorderLayout.CENTER);
         
         parent_panel.add(father_panel, BorderLayout.NORTH);
@@ -205,7 +233,6 @@ public class main_code extends JFrame
         main_match_panel.add(child_panel, BorderLayout.SOUTH);
         
         match_frame.add(main_match_panel);
-        
         
         //Enable legal marriages
         lissa.set_up_partners(new parent_unit[] {frederick, virion, vaike, stahl, kellam, lonqu, ricken, gaius, gregor, libra, henry, donnel});
@@ -220,7 +247,6 @@ public class main_code extends JFrame
         olivia.set_up_partners(new parent_unit[] {chrom, frederick, virion, vaike, stahl, kellam, lonqu, ricken, gaius, gregor, libra, henry, donnel});
         cherche.set_up_partners(new parent_unit[] {frederick, virion, vaike, stahl, kellam, lonqu, ricken, gaius, gregor, libra, henry, donnel});
         
-        
         //Creates the UI for the review menu
         review_frame.add(main_review_panel);
         
@@ -230,13 +256,50 @@ public class main_code extends JFrame
         }
         
         
+        
+        //Creates everything for the Team menu
+        open_team_button.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent event){
+                if (team_frame.isVisible()==false){
+                    team_frame.setVisible(true);
+                }
+        }
+        }
+        );
+        
+        team_panel.add(team_progress_label, BorderLayout.NORTH);
+        team_panel.add(team_list_panel, BorderLayout.CENTER);
+        team_frame.add(team_panel);
+        
+        team_frame.setPreferredSize(new Dimension(400, 1000));
+        team_frame.setLocation((int)java.awt.Toolkit.getDefaultToolkit().getScreenSize().getWidth()-400, 0);
+        team_frame.pack();
+        
+        
         setPreferredSize(new Dimension(200, 200));
-        
-        
         pack();
-        
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setVisible(true);
+    }
+    
+    //Updates the team panel
+    public static void update_team(){
+        
+        team_list_panel.removeAll();
+        
+        GridBagConstraints panel_constants=new GridBagConstraints();
+        
+        for (int i=0; i<units_on_team.size(); i++){
+            panel_constants.gridx=i-3*(int)(i/3);
+            panel_constants.gridy=(int)(i/3);
+            //team_list_panel.add(units_on_team.get(i).info_button, panel_constants);
+            team_list_panel.add(units_on_team.get(i).on_team_info_button, panel_constants);
+        }
+        
+        
+        SwingUtilities.updateComponentTreeUI(team_frame);
+        team_frame.pack();
+        
     }
     
     
@@ -245,10 +308,18 @@ public class main_code extends JFrame
         
         public void paintComponent(Graphics graph){
             super.paintComponent(graph);
-            graph.setColor(Color.BLACK);
             
             for (int i=0; i<mother.all_mothers.size(); i++){
                 if (mother.all_mothers.get(i).matched_with!=null){
+                    
+                    graph.setColor(Color.BLACK);
+                    if (mother.all_mothers.get(i).parent_of.finished==true){
+                        graph.setColor(Color.BLUE);
+                    }
+                    if (mother.all_mothers.get(i).matched_with.name=="Chrom" && main_code.lucina.finished==true){
+                        graph.setColor(Color.BLUE);
+                    }
+                    
                     graph.drawLine(mother.all_mothers.get(i).matched_with.buttons_panel.getLocation().x+mother.all_mothers.get(i).matched_with.buttons_panel.getSize().width/2,
                     0,
                     mother.all_mothers.get(i).buttons_panel.getLocation().x+mother.all_mothers.get(i).buttons_panel.getSize().width/2, 

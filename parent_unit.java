@@ -10,7 +10,6 @@ public abstract class parent_unit extends character_unit
 {
     //A unit that is also a parent. Parents can have children if they marry.
     
-    Char_Attached_JButton info_button;
     
     unit_class[] classes_availible;
     
@@ -45,6 +44,9 @@ public abstract class parent_unit extends character_unit
         info_button=new Char_Attached_JButton(this, name);
         info_button.addActionListener(new InfoButtonListener());
         
+        on_team_info_button=new Char_Attached_JButton(this, name);
+        on_team_info_button.addActionListener(new InfoButtonListener());
+        
         buttons_panel.add(info_button, BorderLayout.CENTER);
         buttons_panel.add(match_button, BorderLayout.SOUTH);
         
@@ -59,6 +61,21 @@ public abstract class parent_unit extends character_unit
             
             Char_Attached_JButton source=(Char_Attached_JButton)event.getSource();
             
+            
+            //If this matching will disallow a child that his been finalised
+            if (source.attached_to_parent.parent_of!=null && source.attached_to_parent.parent_of.finished==true){
+                int confirm_match=JOptionPane.showConfirmDialog(main_code.match_frame, "Doing this will clear your progress\non the chracter "+source.attached_to_parent.parent_of.name+".\nAre you sure?");
+                if (confirm_match==JOptionPane.NO_OPTION || confirm_match==JOptionPane.CANCEL_OPTION || confirm_match==-1){
+                    return;
+                }
+            }
+            if (source.attached_to_parent.matched_with!=null && source.attached_to_parent.matched_with.parent_of!=null && source.attached_to_parent.matched_with.parent_of.finished==true){
+                int confirm_match=JOptionPane.showConfirmDialog(main_code.match_frame, "Doing this will clear your progress\non the chracter "+source.attached_to_parent.matched_with.parent_of.name+".\nAre you sure?");
+                if (confirm_match==JOptionPane.NO_OPTION || confirm_match==JOptionPane.CANCEL_OPTION || confirm_match==-1){
+                    return;
+                }
+            }
+            
             //If either parent_unit is already married, un-marry them.
             if (source.attached_to_parent.matched_with!=null){
                 
@@ -69,11 +86,13 @@ public abstract class parent_unit extends character_unit
                 source.attached_to_parent.matched_with.info_frame.married_to_label.setText("Married to: None");
                 ((parent_info_frame)source.attached_to_parent.matched_with.info_frame).child1_label.setText("");
                 source.attached_to_parent.matched_with.matched_with=null;
+                source.attached_to_parent.matched_with.finished_frame.update_frame();
                 
             }
             
             source.attached_to_parent.info_frame.married_to_label.setText("Married to: None");
             source.attached_to_parent.matched_with=null;
+            source.attached_to_parent.finished_frame.update_frame();
             
             if (source.attached_to_parent.parent_of!=null){
                  source.attached_to_parent.parent_of.remove_parent2();
@@ -104,7 +123,7 @@ public abstract class parent_unit extends character_unit
                 return;
             }
             
-            //Handles if the user ties to match a parent_unit with themself. 
+            //Handles if the user tries to match a parent_unit with themself. 
             if (main_code.clicked_match.name==source.attached_to_parent.name){
                 main_code.clicked_match=null;
                 
@@ -148,6 +167,10 @@ public abstract class parent_unit extends character_unit
                 for (int i=0; i<father.all_fathers.size(); i++){
                     father.all_fathers.get(i).match_button.setText("match");
                 }
+                
+                source.attached_to_parent.finished_frame.update_frame();
+                main_code.clicked_match.finished_frame.update_frame();
+                
                 
                 main_code.clicked_match=null;
                 

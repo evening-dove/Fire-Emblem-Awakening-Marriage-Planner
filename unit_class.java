@@ -1,7 +1,7 @@
 
 public class unit_class
 {
-    //A class. Each class has a name, 2 skills, and 8 stats.
+    //A class. Each class has a name, 2 skills, and 9 stats.
     
     
     String name;
@@ -30,6 +30,6 @@ public class unit_class
         this.skill2_info=skill2_info;
         this.stats=stats;
         
-        stats_text="HP: "+stats[0]+"Str: "+stats[1]+"Mag: "+stats[2]+"Skl: "+stats[3]+"Spd: "+stats[4]+"Lck: "+stats[5]+"Def: "+stats[6]+"Res: "+stats[7];
+        stats_text="HP: "+stats[0]+"Str: "+stats[1]+"Mag: "+stats[2]+"Skl: "+stats[3]+"Spd: "+stats[4]+"Lck: "+stats[5]+"Def: "+stats[6]+"Res: "+stats[7]+"Mov: "+stats[8];
     }
 }
