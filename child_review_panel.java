@@ -5,13 +5,13 @@ import java.awt.event.*;
 
 import java.util.*;
 
-
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.*;
 import java.util.List;
 
 
+import java.in.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 
@@ -155,7 +155,7 @@ public class child_review_panel extends JPanel
                         temp_review_label.setText("<html><body>");
                         edit_review_area.setText("");
                         
-                        Path file=Paths.get("C:/Users/Bryan/Documents/java/fire_emblem_awakening_child_planner/match_reviews/"+based_on.name+"/"+((JButton)event.getSource()).getText()+".txt");
+                        Path file=Paths.get((new File("match_reviews/"+based_on.name)).getAbsolutePath()+"/"+((JButton)event.getSource()).getText()+".txt");
                         Charset text_file_charset=Charset.forName("ISO-8859-1");
                         
                         try{
