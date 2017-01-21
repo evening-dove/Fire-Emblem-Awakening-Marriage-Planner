@@ -4,9 +4,9 @@ A swing program witten in Java.
 
 (Updated Jan 21 2017)
 Newly Added:
--Finalizing units
--A team feature
--Bug fixes
+ - Finalizing units
+ - A team feature
+ - Bug fixes
 
 Intended to be used alongside the video game Fire Emblem Awakening (2013) as a notebook to help with, and keep track of characters. 
 Allows for planning out the marriage system, and seeing what effects certain decisions will have.
