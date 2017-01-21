@@ -8,6 +8,7 @@ Newly Added:
  - A team feature
  - Bug fixes
 
+
 Intended to be used alongside the video game Fire Emblem Awakening (2013) as a notebook to help with, and keep track of characters. 
 Allows for planning out the marriage system, and seeing what effects certain decisions will have.
 Also allows the user to take notes on what they think of certain marriages.
