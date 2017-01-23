@@ -1,0 +1,49 @@
+Chrom
+Sumia
+Great Lord
+Dual Strike+|Dual Guard+|Aether|Luna|Bowbreaker
+A front line unit.
+true
+
+Sumia
+Chrom
+Falcon Knight
+Luna|Rally Movement|Rally Speed|Speed +2
+More of a back-up unit.
+false
+
+Kellam
+None
+Priest
+Healtouch|Dual Guard+|Miracle|Renewal
+My healing unit.
+false
+
+Tharja
+None
+Great Knight
+Hex|Vengeance|Slow Burn|Skill +2
+None
+true
+
+Lucina
+Sumia
+Paladin
+Hit Rate +20|Skill +2|Aether|Bowbreaker|Outdoor Fighter
+An experimental unit.
+true
+
+Kjelle
+Virion
+General
+Aegis|Pavise|Defender|Dual Guard+|Defense +2
+My defencive wall.
+true
+
+Nah
+Ricken
+Wyvern Rider
+Wyrmsbane|Tantivy|Lancebreaker
+Used to transport slower units.
+false
+
