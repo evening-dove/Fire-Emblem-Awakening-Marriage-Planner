@@ -387,46 +387,5 @@ public class child_info_frame extends character_info_frame
     }
     
     
-    //The listener for the button that displays additional info about a skill
-    private class SkillInfoButtonListener implements ActionListener{
-        
-        public void actionPerformed(ActionEvent event){
-            
-            Skill_Info_JButton source=(Skill_Info_JButton)event.getSource();
-            
-            info_panel.removeAll();
-            
-            info_panel.add(new JLabel(source.description));
-            
-            this_frame.pack();
-        }
-        
-    }
     
-    //The listener for the button that marks a skill as being considered
-    private class AddSkillButtonListener implements ActionListener{
-        
-        public void actionPerformed(ActionEvent event){
-            
-            JButton source=(JButton)event.getSource();
-            
-            if (skills_to_get.contains(source.getText())==false){
-                skills_to_get.add(source.getText());
-            }
-            
-            //If the skill is already being considered, remove it instead
-            else{
-                skills_to_get.remove(source.getText());
-            }
-            
-            this_frame.picked_skills_panel.removeAll();
-            
-            for (int i=0; i<skills_to_get.size(); i++){
-                this_frame.picked_skills_panel.add(new JLabel(skills_to_get.get(i), SwingConstants.CENTER));
-            }
-            
-            this_frame.pack();
-        }
-        
-    }
 }

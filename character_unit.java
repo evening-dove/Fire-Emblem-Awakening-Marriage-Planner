@@ -11,6 +11,9 @@ public abstract class character_unit
 {
     //Abstract class for a unit
     
+    
+    static ArrayList<character_unit> all_units=new ArrayList<character_unit>();
+    
     String name;
     boolean is_female;
     boolean is_parent;
@@ -35,8 +38,13 @@ public abstract class character_unit
         this.is_female=is_female;
         this.is_parent=is_parent;
         
+        character_unit.all_units.add(this);
+        
         finished_frame=new finished_unit_frame(this);
     }
+    
+    public abstract void clear_unit();
+    
     
     //Button that lets you open up a unit's info frame. (The buttons with names on them)
     public static class Char_Attached_JButton extends JButton{

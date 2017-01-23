@@ -231,6 +231,72 @@ public abstract class character_info_frame extends JFrame
     }
     
     
+    public void display_picked_classes(){
+        this_frame.picked_stats_panel.removeAll();
+        this_frame.picked_classes_panel.removeAll();
+            
+        //finds out what stats go with the selected class
+        for (int i=0; i<classes_to_become.size(); i++){
+            this_frame.picked_classes_panel.add(new JLabel(classes_to_become.get(i).name, SwingConstants.CENTER));
+                
+            int[] stats_to_use=classes_to_become.get(i).stats;
+                
+                
+            if (classes_to_become.get(i)==main_code.great_lord && this_frame.based_on.name=="Lucina"){
+                stats_to_use=main_code.great_lord_f_stats;
+            }
+                
+            String[] stat_names=new String[] {" Str: ", " Mag: ", " Skl: ", " Spd: ", " Lck: ", " Def: ", " Res: "};
+            String stats_text="HP: "+stats_to_use[0];
+                
+            for (int ii=0; ii<7; ii++){
+                stats_text=stats_text+stat_names[ii];
+                    
+                if (is_parent==true){
+                    stats_text=stats_text+(stats_to_use[ii+1]+((parent_unit)this_frame.based_on).stat_modifier[ii]);
+                }
+                    
+                if (is_parent==false){
+                    
+                    if (((child)this_frame.based_on).flexable_parent==null){
+                        stats_text=stats_text+(stats_to_use[ii+1]+((child)this_frame.based_on).constant_parent.stat_modifier[ii]+1);
+                    }
+                        
+                    if (((child)this_frame.based_on).flexable_parent!=null){
+                        stats_text=stats_text+(stats_to_use[ii+1]+((child)this_frame.based_on).constant_parent.stat_modifier[ii]+((child)this_frame.based_on).flexable_parent.stat_modifier[ii]+1);
+                    }
+                }
+                    
+            }
+                
+            stats_text+=" Mov: "+stats_to_use[8];
+                
+                
+            this_frame.picked_stats_panel.add(new JLabel(stats_text, SwingConstants.CENTER));
+            }
+            
+        SwingUtilities.updateComponentTreeUI(this_frame);
+        this_frame.pack();
+        
+    }
+    
+    
+    public void display_picked_skills(){
+        this_frame.picked_skills_panel.removeAll();
+            
+        for (int i=0; i<skills_to_get.size(); i++){
+            this_frame.picked_skills_panel.add(new JLabel(skills_to_get.get(i), SwingConstants.CENTER));
+        }
+            
+        SwingUtilities.updateComponentTreeUI(this_frame);
+        this_frame.pack();
+        
+    }
+    
+    
+    
+    
+    
     
     
     //Re-evaluates what classes and skills a unit has access to.
@@ -301,6 +367,8 @@ public abstract class character_info_frame extends JFrame
             skills_panel.add(skill_options.get(i));
         }
         
+        SwingUtilities.updateComponentTreeUI(this);
+        pack();
     }
     
     
@@ -339,51 +407,7 @@ public abstract class character_info_frame extends JFrame
                 classes_to_become.remove(source.based_on);
             }
             
-            this_frame.picked_stats_panel.removeAll();
-            this_frame.picked_classes_panel.removeAll();
-            
-            //finds out what stats go with the selected class
-            for (int i=0; i<classes_to_become.size(); i++){
-                this_frame.picked_classes_panel.add(new JLabel(classes_to_become.get(i).name, SwingConstants.CENTER));
-                
-                int[] stats_to_use=classes_to_become.get(i).stats;
-                
-                
-                if (classes_to_become.get(i)==main_code.great_lord && this_frame.based_on.name=="Lucina"){
-                    stats_to_use=main_code.great_lord_f_stats;
-                }
-                
-                String[] stat_names=new String[] {" Str: ", " Mag: ", " Skl: ", " Spd: ", " Lck: ", " Def: ", " Res: "};
-                String stats_text="HP: "+stats_to_use[0];
-                
-                for (int ii=0; ii<7; ii++){
-                    stats_text=stats_text+stat_names[ii];
-                    
-                    if (is_parent==true){
-                        stats_text=stats_text+(stats_to_use[ii+1]+((parent_unit)this_frame.based_on).stat_modifier[ii]);
-                    }
-                    
-                    if (is_parent==false){
-                    
-                        if (((child)this_frame.based_on).flexable_parent==null){
-                            stats_text=stats_text+(stats_to_use[ii+1]+((child)this_frame.based_on).constant_parent.stat_modifier[ii]+1);
-                        }
-                        
-                        if (((child)this_frame.based_on).flexable_parent!=null){
-                            stats_text=stats_text+(stats_to_use[ii+1]+((child)this_frame.based_on).constant_parent.stat_modifier[ii]+((child)this_frame.based_on).flexable_parent.stat_modifier[ii]+1);
-                        }
-                    }
-                    
-                }
-                
-                stats_text+=" Mov: "+stats_to_use[8];
-                
-                
-                this_frame.picked_stats_panel.add(new JLabel(stats_text, SwingConstants.CENTER));
-            }
-            
-            SwingUtilities.updateComponentTreeUI(this_frame);
-            this_frame.pack();
+            this_frame.display_picked_classes();
         }
         
     }
@@ -407,7 +431,7 @@ public abstract class character_info_frame extends JFrame
     
     
     //Listener for Skill_Info_JButton
-    private class SkillInfoButtonListener implements ActionListener{
+    protected class SkillInfoButtonListener implements ActionListener{
         
         public void actionPerformed(ActionEvent event){
             
@@ -425,7 +449,7 @@ public abstract class character_info_frame extends JFrame
     
     
     //Listener for the button that labels a skill as being considered, or no longer considered
-    private class AddSkillButtonListener implements ActionListener{
+    protected class AddSkillButtonListener implements ActionListener{
         
         public void actionPerformed(ActionEvent event){
             
@@ -439,18 +463,7 @@ public abstract class character_info_frame extends JFrame
                 skills_to_get.remove(source.getText());
             }
             
-            this_frame.picked_skills_panel.removeAll();
-            
-            for (int i=0; i<skills_to_get.size(); i++){
-                this_frame.picked_skills_panel.add(new JLabel(skills_to_get.get(i), SwingConstants.CENTER));
-            }
-            
-            SwingUtilities.updateComponentTreeUI(this_frame);
-            this_frame.pack();
+            this_frame.display_picked_skills();
         }
     }
-    
-    
 }
-
-

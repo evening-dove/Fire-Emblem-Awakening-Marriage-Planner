@@ -1,8 +1,18 @@
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.*;
 
+
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.*;
+import java.util.List;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 
 import java.util.*;
 
@@ -19,8 +29,12 @@ public class main_code extends JFrame
     static JButton open_plan_button=new JButton("Plan");
     static JButton open_review_button=new JButton("Review");
     
+    static JButton new_team_button=new JButton("New Team");
+    static JButton load_team_button=new JButton("Load Team");
+    
     static JButton open_match_button=new JButton("Match");
     static JButton open_team_button=new JButton("Team");
+    static JButton save_button=new JButton("Save");
     
     static JFrame match_frame=new JFrame();
     
@@ -67,7 +81,7 @@ public class main_code extends JFrame
     static unit_class dark_knight=new unit_class("Dark Knight", "Slow Burn", "Hit rate and Avoid increases by 1 each Turn up to the 15th turn", "Lifetaker", "User recovers 50% Max HP after they defeat an enemy during the user's Turn.", new int[] {80, 38, 41, 40, 40, 45, 42, 38, 8});
     static unit_class war_monk=new unit_class("War Monk", "Rally Luck", "Luck +8 to all allies within a 3 tile radius for one Turn", "Renewal", "Recover 30% HP at the start of the user's Turn", new int[] {80, 40, 40, 38, 41, 45, 38, 43, 6});
     static unit_class valkyrie=new unit_class("Valkyrie", "Rally Resistance", "Resistance +4 to all allies within a 3 tile radius for one Turn", "Dual Support+", "Increases the Dual Support level of a unit by 4", new int[] {80, 30, 42, 38, 43, 45, 30, 45, 8});
-    static unit_class villager=new unit_class("Villager", "Aptitude", "Adds 20% to all growth rates during Level Ups", "Underdog", "Hit rate and Avoid +15 when user's Level is lower than the enemy (promoted units count as Level +20)	", new int[] {60, 20, 20, 20, 20, 30, 20, 20, 5});
+    static unit_class villager=new unit_class("Villager", "Aptitude", "Adds 20% to all growth rates during Level Ups", "Underdog", "Hit rate and Avoid +15 when user's Level is lower than the enemy (promoted units count as Level +20)    ", new int[] {60, 20, 20, 20, 20, 30, 20, 20, 5});
     static unit_class dancer=new unit_class("Dancer", "Luck +4", "Luck +4", "Special Dance", "Strength, Magic, Defence and Resistance +2 for one Turn for the unit who receives the user's Dance", new int[] {80, 30, 30, 40, 40, 45, 30, 30, 5});
     static unit_class taguel=new unit_class("Taguel", "Even Rhythm", "Hit rate and Avoid +10 during even numbered Turns", "Beastbane", "Deals effective damage to Beast (beast *3) units when user is a Taguel", new int[] {80, 35, 30, 40, 40, 45, 35, 30, 6});
     static unit_class manakete=new unit_class("Manakete", "Odd Rhythm", "Hit rate and Avoid +10 during odd numbered Turns", "Wyrmsbane", "Deals effective damage to Dragon (dragon) units when user is a Manakete", new int[] {80, 40, 35, 35, 35, 45, 40, 40, 6});
@@ -148,7 +162,7 @@ public class main_code extends JFrame
         //anonymous listener for the back button
         back_button.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent event){
-                if (current_menu=="planning"){
+                if (current_menu=="new or load"){
                     this_frame.current_menu="main";
                     this_frame.main_panel.removeAll();
                     this_frame.main_panel.add(open_plan_button);
@@ -157,19 +171,205 @@ public class main_code extends JFrame
                     SwingUtilities.updateComponentTreeUI(this_frame);
                     this_frame.pack();
                 }
+                if (current_menu=="planning"){
+                    int confirm_back=JOptionPane.showConfirmDialog(this_frame, "Are you sure?\nAll unsaved progress on your current\nteam will be lost.");
+                    if (confirm_back==JOptionPane.YES_OPTION){
+                        for (int i=0; i<character_unit.all_units.size(); i++){
+                            character_unit.all_units.get(i).clear_unit();
+                        }
+                        this_frame.current_menu="new or load";
+                        this_frame.main_panel.removeAll();
+                        this_frame.main_panel.add(new_team_button);
+                        this_frame.main_panel.add(load_team_button);
+                        this_frame.main_panel.add(back_button);
+                        
+                        SwingUtilities.updateComponentTreeUI(this_frame);
+                        this_frame.pack();
+                    }
+                }
         }
         }
         );
         
-        //anonymous listener for if the user opens up the planning menu
-        open_plan_button.addActionListener(new ActionListener(){
+        //anonymous listener for the new team button
+        new_team_button.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent event){
-                this_frame.current_menu="planning";
+                current_menu="planning";
                 this_frame.main_panel.removeAll();
                 this_frame.main_panel.add(open_match_button);
                 this_frame.main_panel.add(open_team_button);
+                this_frame.main_panel.add(save_button);
                 this_frame.main_panel.add(back_button);
+                        
+                SwingUtilities.updateComponentTreeUI(this_frame);
+                this_frame.pack();
                 
+                match_frame.pack();
+                
+                update_team();
+                team_frame.pack();
+        }
+        }
+        );
+        
+        //anonymous listener for loading a team
+        load_team_button.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent event){
+                JFileChooser team_selector=new JFileChooser();
+                team_selector.setCurrentDirectory(new File((new File("saved_teams")).getAbsolutePath()));
+                FileNameExtensionFilter file_filter = new FileNameExtensionFilter("Text files", "txt");
+                team_selector.setFileFilter(file_filter);
+                int file_picked=team_selector.showOpenDialog(this_frame);
+                
+                if (file_picked==0){
+                    File file_to_load=team_selector.getSelectedFile();
+                    
+                    Charset text_file_charset=Charset.forName("ISO-8859-1");
+                    
+                    try{
+                        //Units are saved in a txt as:
+                        //Unit name
+                        //Father or Mother or Spouse's name
+                        //Class
+                        //Skills
+                        //Comment
+                        //"true" if they are on the team, "false" otherwise.
+                        //(Blank space)
+                        
+                        List<String> fileArray=Files.readAllLines(file_to_load.toPath(), text_file_charset);
+                        
+                        int character_checker_index=0;
+                        character_unit unit_loading=null;
+                        int character_info_line=0;
+                        
+                        for (int i=0; fileArray.size()>i; i++){
+                            if (fileArray.get(i).compareTo("")==0){
+                                unit_loading=null;
+                                character_info_line=0;
+                            }
+                            else{
+                                //Figure out who the unit being loaded in is.
+                                while (unit_loading==null){
+                                    if (character_unit.all_units.get(character_checker_index).name.compareTo(fileArray.get(i))==0){
+                                        unit_loading=father.all_units.get(character_checker_index);
+                                    }
+                                    else{
+                                        character_checker_index++;
+                                    }
+                                }
+                                
+                                if (character_info_line==0){
+                                    unit_loading.finished=true;
+                                }
+                                
+                                //Load Father or Mother or Spouse's name
+                                if (character_info_line==1 && fileArray.get(i).compareTo("None")!=0){
+                                    int family_checker_index=0;
+                                    
+                                    if (unit_loading.is_parent==true){
+                                        while (((parent_unit)unit_loading).matched_with==null){
+                                            if (((parent_unit)unit_loading).marry_options.get(family_checker_index).name.compareTo(fileArray.get(i))==0){
+                                                ((parent_unit)unit_loading).matched_with=((parent_unit)unit_loading).marry_options.get(family_checker_index);
+                                                ((parent_unit)unit_loading).matched_with.matched_with=(parent_unit)unit_loading;
+                                                
+                                                if (((parent_unit)unit_loading).parent_of!=null){
+                                                    ((parent_unit)unit_loading).parent_of.add_parent2(((parent_unit)unit_loading).matched_with);
+                                                }
+                                                if (((parent_unit)unit_loading).matched_with.parent_of!=null){
+                                                    ((parent_unit)unit_loading).matched_with.parent_of.add_parent2((parent_unit)unit_loading);
+                                                }
+                                            }
+                                            family_checker_index++;
+                                        }
+                                    }
+                                    if (unit_loading.is_parent!=true){
+                                        while (((child)unit_loading).flexable_parent==null){
+                                            if (((child)unit_loading).constant_parent.marry_options.get(family_checker_index).name.compareTo(fileArray.get(i))==0){
+                                                ((child)unit_loading).constant_parent.matched_with=((child)unit_loading).constant_parent.marry_options.get(family_checker_index);
+                                                ((child)unit_loading).constant_parent.matched_with.matched_with=((child)unit_loading).constant_parent;
+                                                
+                                                ((child)unit_loading).add_parent2(((child)unit_loading).constant_parent.matched_with);
+                                                
+                                                if (((child)unit_loading).constant_parent.matched_with.parent_of!=null){
+                                                    ((child)unit_loading).constant_parent.matched_with.parent_of.add_parent2(((child)unit_loading).constant_parent);
+                                                }
+                                            }
+                                            family_checker_index++;
+                                        }
+                                    }
+                                }
+                                
+                                //load class
+                                if (character_info_line==2){
+                                    int class_checker_index=0;
+                                    while (unit_loading.info_frame.classes_to_become.size()==0){
+                                        if (unit_class.all_classes.get(class_checker_index).name.compareTo(fileArray.get(i))==0){
+                                            unit_loading.info_frame.classes_to_become.add(unit_class.all_classes.get(class_checker_index));
+                                        }
+                                        class_checker_index++;
+                                    }
+                                }
+                                
+                                //load skills
+                                if (character_info_line==3 && fileArray.get(i).compareTo("None")!=0){
+                                    int skills_line_index=0;
+                                    while (fileArray.get(i).substring(skills_line_index).contains("|")){
+                                        unit_loading.info_frame.skills_to_get.add(fileArray.get(i).substring(skills_line_index).substring(0, fileArray.get(i).substring(skills_line_index).indexOf("|")));
+                                        skills_line_index+=fileArray.get(i).substring(skills_line_index).indexOf("|")+1;
+                                    }
+                                    unit_loading.info_frame.skills_to_get.add(fileArray.get(i).substring(skills_line_index));
+                                }
+                                
+                                //load comment
+                                if (character_info_line==4 && fileArray.get(i).compareTo("None")!=0){
+                                    unit_loading.finished_frame.comment_label.setText(fileArray.get(i));
+                                }
+                                
+                                //load if they were on the team
+                                if (character_info_line==5){
+                                    if (fileArray.get(i).compareTo("true")==0){
+                                        unit_loading.finished_frame.add_to_team_button.doClick();
+                                    }
+                                    
+                                    unit_loading.info_frame.display_picked_classes();
+                                    unit_loading.info_frame.display_picked_skills();
+                                    
+                                    unit_loading.info_frame.pack();
+                                    unit_loading.finished_frame.update_frame();
+                                }
+                                
+                                character_info_line++;
+                            }
+                        }
+                        this_frame.current_menu="planning";
+                        this_frame.main_panel.removeAll();
+                        this_frame.main_panel.add(open_match_button);
+                        this_frame.main_panel.add(open_team_button);
+                        this_frame.main_panel.add(save_button);
+                        this_frame.main_panel.add(back_button);
+                        
+                        SwingUtilities.updateComponentTreeUI(this_frame);
+                        this_frame.pack();
+                    }
+                        
+                    catch (IOException e) {
+                        System.out.println(e);
+                    }
+                }
+        }
+        }
+        );
+        
+        
+        //anonymous listener for if the user opens up the planning menu
+        open_plan_button.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent event){
+                this_frame.current_menu="new or load";
+                this_frame.main_panel.removeAll();
+                this_frame.main_panel.add(new_team_button);
+                this_frame.main_panel.add(load_team_button);
+                this_frame.main_panel.add(back_button);
+                    
                 SwingUtilities.updateComponentTreeUI(this_frame);
                 this_frame.pack();
         }
@@ -267,6 +467,74 @@ public class main_code extends JFrame
         }
         );
         
+        
+        //Listener for the save button
+        save_button.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent event){
+                String team_save_name=JOptionPane.showInputDialog(this_frame, "Please enter your team name.");
+                if (team_save_name.compareTo("")!=0 && team_save_name!=null){
+                    try{
+                        PrintWriter team_save_writer=new PrintWriter("saved_teams\\"+team_save_name+".txt", "UTF-8");
+                        
+                        
+                        for (int i=0; i<character_unit.all_units.size(); i++){
+                            if (character_unit.all_units.get(i).finished==true){
+                                //Save Unit's name
+                                team_save_writer.println(character_unit.all_units.get(i).name);
+                                
+                                //Save Unit's Father or Mother or Spouse
+                                if (character_unit.all_units.get(i).is_parent==true){
+                                    if (((parent_unit)character_unit.all_units.get(i)).matched_with!=null){
+                                        team_save_writer.println(((parent_unit)character_unit.all_units.get(i)).matched_with.name);
+                                    }
+                                    else{
+                                        team_save_writer.println("None");
+                                    }
+                                }
+                                else{
+                                    team_save_writer.println(((child)character_unit.all_units.get(i)).flexable_parent.name); //Finalized kids will always have a parent
+                                }
+                                
+                                //Save Unit's class
+                                team_save_writer.println(character_unit.all_units.get(i).info_frame.classes_to_become.get(0).name);
+                                
+                                //Save Unit's skills
+                                if (character_unit.all_units.get(i).info_frame.skills_to_get.size()>0){
+                                    String skills_text_save=character_unit.all_units.get(i).info_frame.skills_to_get.get(0);
+                                    for (int ii=1; ii<character_unit.all_units.get(i).info_frame.skills_to_get.size(); ii++){
+                                        skills_text_save+="|"+character_unit.all_units.get(i).info_frame.skills_to_get.get(ii);
+                                    }
+                                    team_save_writer.println(skills_text_save);
+                                }
+                                else{
+                                    team_save_writer.println("None");
+                                }
+                                
+                                //Save Unit's comment
+                                if (character_unit.all_units.get(i).finished_frame.comment_label.getText()!=null && character_unit.all_units.get(i).finished_frame.comment_label.getText()!=""){
+                                    team_save_writer.println(character_unit.all_units.get(i).finished_frame.comment_label.getText());
+                                }
+                                else{
+                                    team_save_writer.println("None");
+                                }
+                                
+                                //Save if Unit is on the team 
+                                team_save_writer.println(Boolean.toString(units_on_team.contains(character_unit.all_units.get(i))));
+                                
+                                team_save_writer.println();
+                            }
+                        }
+                        team_save_writer.close();
+                    }
+                    catch (IOException e) {
+                        System.out.println(e);
+                    }
+                }
+                
+        }
+        }
+        );
+        
         team_panel.add(team_progress_label, BorderLayout.NORTH);
         team_panel.add(team_list_panel, BorderLayout.CENTER);
         team_frame.add(team_panel);
@@ -276,7 +544,7 @@ public class main_code extends JFrame
         team_frame.pack();
         
         
-        setPreferredSize(new Dimension(200, 200));
+        setPreferredSize(new Dimension(180, 140));
         pack();
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setVisible(true);
@@ -292,10 +560,10 @@ public class main_code extends JFrame
         for (int i=0; i<units_on_team.size(); i++){
             panel_constants.gridx=i-3*(int)(i/3);
             panel_constants.gridy=(int)(i/3);
-            //team_list_panel.add(units_on_team.get(i).info_button, panel_constants);
             team_list_panel.add(units_on_team.get(i).on_team_info_button, panel_constants);
         }
         
+        team_progress_label.setText("Current Team: ("+units_on_team.size()+"/15)");
         
         SwingUtilities.updateComponentTreeUI(team_frame);
         team_frame.pack();

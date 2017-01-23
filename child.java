@@ -63,6 +63,10 @@ public class child extends character_unit
         ((parent_info_frame)parent2.info_frame).child2_label.setText("Flexable Child: "+name);
         ((child_info_frame)info_frame).reset_classes();
         
+        constant_parent.info_frame.married_to_label.setText("Married to: "+flexable_parent.name);
+        flexable_parent.info_frame.married_to_label.setText("Married to: "+constant_parent.name);
+        flexable_parent_label.setText("<html>Parent No.<br>1: "+constant_parent.name+"<br>2: "+flexable_parent.name+"</html>");
+        
         info_frame.pack();
         
     }
@@ -87,6 +91,10 @@ public class child extends character_unit
         
         info_frame.pack();
         
+    }
+    
+    public void clear_unit(){
+        remove_parent2();
     }
     
     

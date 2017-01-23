@@ -53,6 +53,27 @@ public abstract class parent_unit extends character_unit
         info_frame=new parent_info_frame(this, true);
     }
     
+    public void clear_unit(){
+        matched_with=null;
+        
+        finished=false;
+        info_frame.classes_to_become.clear();
+        info_frame.skills_to_get.clear();
+        
+        info_frame.married_to_label.setText("");
+        ((parent_info_frame)info_frame).child2_label.setText("");
+        info_frame.picked_classes_panel.removeAll();
+        info_frame.picked_stats_panel.removeAll();
+        info_frame.picked_skills_panel.removeAll();
+        info_frame.pack();
+        
+        main_code.units_on_team.remove(this);
+        finished_frame.add_to_team_button.setText("Add to Team");
+        main_code.update_team();
+        
+        main_code.update_team();
+    }
+    
     
     
     //The listener for the button which matches 2 parent_units

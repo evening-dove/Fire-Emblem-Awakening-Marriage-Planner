@@ -1,8 +1,11 @@
+import java.util.*;
+
 
 public class unit_class
 {
     //A class. Each class has a name, 2 skills, and 9 stats.
     
+    static ArrayList<unit_class> all_classes=new ArrayList<unit_class>();
     
     String name;
     
@@ -14,6 +17,8 @@ public class unit_class
     
     int[] stats;
     String stats_text;
+    
+    
     
     //Initiates unit_class()
     //Takes as peramaters: a String for what the unit_class is named, a String for what the unit_class's first skill is, 
@@ -31,5 +36,6 @@ public class unit_class
         this.stats=stats;
         
         stats_text="HP: "+stats[0]+"Str: "+stats[1]+"Mag: "+stats[2]+"Skl: "+stats[3]+"Spd: "+stats[4]+"Lck: "+stats[5]+"Def: "+stats[6]+"Res: "+stats[7]+"Mov: "+stats[8];
+        unit_class.all_classes.add(this);
     }
 }
