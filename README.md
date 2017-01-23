@@ -2,6 +2,11 @@
 
 A swing program witten in Java. 
 
+(Updated Jan 23 2017)
+Newly Added:
+ - Save Functionality. Teams and Finalized units can be saved and reloaded at a later date.
+ - Increased user friendliness
+
 (Updated Jan 21 2017)
 Newly Added:
  - Finalizing units
