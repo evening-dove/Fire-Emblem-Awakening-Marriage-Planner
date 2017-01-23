@@ -152,7 +152,9 @@ public class main_code extends JFrame
     static JPanel main_review_panel=new JPanel(new GridLayout(0,1,5,5));
 
     
-    
+    public static void main(){
+        new main_code();
+    }
     
     public main_code()
     {
