@@ -1,49 +1,84 @@
 Chrom
-Sumia
-Great Lord
-Dual Strike+|Dual Guard+|Aether|Luna|Bowbreaker
-A front line unit.
+Sully
+Sniper
+Aegis|Luna|Dual Guard+|Dual Strike+|Bowfaire
+Meant to pair up with Lucina, but he can fight on his own.
 true
 
-Sumia
-Chrom
-Falcon Knight
-Luna|Rally Movement|Rally Speed|Speed +2
-More of a back-up unit.
-false
+Miriel
+Vaike
+Sage
+Anathema|Hex|Tomefaire|Dual Support+|Magic +2
+Pair up with Laurent to help his critical hit rate and accuracy.
+true
 
-Kellam
-None
-Priest
-Healtouch|Dual Guard+|Miracle|Renewal
-My healing unit.
-false
-
-Tharja
-None
-Great Knight
-Hex|Vengeance|Slow Burn|Skill +2
-None
+Cordelia
+Frederick
+Bow Knight
+Hex|Anathema|Rally Speed|Rally Movement|Rally Skill
+Meant to pair up with Severa to help with her accuracy.
 true
 
 Lucina
-Sumia
-Paladin
-Hit Rate +20|Skill +2|Aether|Bowbreaker|Outdoor Fighter
-An experimental unit.
+Sully
+Assassin
+Rightful King|Luna|Aether|Astra|Lethality
+An aggressive unit. Uses Rightful King to increase consistency of random effects.
 true
 
 Kjelle
-Virion
-General
-Aegis|Pavise|Defender|Dual Guard+|Defense +2
-My defencive wall.
+Chrom
+Paladin
+Luna|Aether|Aegis|Pavise|Lethality
+Used for small offensive pushes and to persue escaping enemies.
 true
 
-Nah
+Laurent
+Vaike
+Sorcerer
+Sol|Gamble|Vengeance|Wrath|Counter
+Equip with Nosferatu (Weapon). A defencive unit. Pair up with Miriel.
+true
+
+Brady
+Kellam
+War Monk
+Aegis|Pavise|Renewal|Dual Guard+|Dual Support+
+Healer. Work in progress, might replace Dual Guard+ with something.
+true
+
+Yarne
 Ricken
-Wyvern Rider
-Wyrmsbane|Tantivy|Lancebreaker
-Used to transport slower units.
-false
+Taguel
+Beastbane|Rally Skill|Rally Magic|Aegis|Lifetaker
+Defensive Taguel. Used to either Rally Severa+Laurent or kill Horsemen.
+true
+
+Severa
+Frederick
+Sorcerer
+Sol|Aegis|Pavise|Vengeance|Lifetaker
+Equip with Nosferatu (Weapon). Main defensive unit. Pair up with Cordelia.
+true
+
+Noire
+Lonqu
+Griffon Rider
+Hit Rate +20|Deliverer|Pass|Luna|Dual Guard+
+Transportation for with Gerome. An agressive unit. Not very good.
+true
+
+Inigo
+Libra
+Hero
+Renewal|Swordfaire|Lifetaker|Sol|Speed +2
+Defensive unit. Used to puch enemies back if we are overwhelmed.
+true
+
+Gerome
+Gregor
+Berserker
+Deliverer|Axefaire|Dual Support+|Sol|Armsthrift
+Pair up with Noire. An aggressive Glass Cannon.
+true
 
