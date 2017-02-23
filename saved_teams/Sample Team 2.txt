@@ -1,0 +1,85 @@
+Chrom
+Olivia
+Great Lord
+Hit Rate +20|Dual Strike+|Dual Guard+|Charm|Prescience
+Pair up with Inigo.
+true
+
+Lucina
+Olivia
+Great Lord
+Dual Strike+|Rightful King|Aether|Lethality|Galeforce
+None
+true
+
+Owain
+Ricken
+Sage
+Tomefaire|Dual Support+|Dual Guard+|Gamble|Hit Rate +20
+Pair-up with Severa.
+true
+
+Kjelle
+Henry
+Dark Knight
+Aegis|Pavise|Vantage|Vengeance|Lifetaker
+None
+true
+
+Laurent
+Gregor
+Dark Knight
+Vantage|Vengeance|Armsthrift|Lifetaker|Renewal
+None
+true
+
+Cynthia
+Frederick
+Falcon Knight
+Galeforce|Renewal|Pavise|Aegis|Outdoor Fighter
+Pair up with Brady
+true
+
+Brady
+Kellam
+War Monk
+Pavise|Aegis|Dual Support+|Dual Guard+|Renewal
+None
+true
+
+Yarne
+Donnel
+Hero
+Sol|Axefaire|Patience|Counter|Armsthrift
+Paire up with Noire. Sol is the best part of the build.
+true
+
+Severa
+Lonqu
+Griffon Rider
+Vengeance|Vantage|Lifetaker|Armsthrift|Galeforce
+Pair up with Owain
+true
+
+Noire
+Gaius
+Dark Knight
+Vengeance|Vantage|Galeforce|Lifetaker|Counter
+None
+true
+
+Inigo
+Chrom
+Paladin
+Luna|Galeforce|Armsthrift|Rightful King|Lethality
+Pair up with Chrom.
+true
+
+Gerome
+Vaike
+Warrior
+Dual Support+|Zeal|Axefaire|Gamble|Strength +2
+Pair up with Lucina
+true
+
+A good team for beating the game.
