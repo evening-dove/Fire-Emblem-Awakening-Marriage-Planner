@@ -128,6 +128,7 @@ public class finished_unit_frame extends JFrame
         
         add(main_panel);
         
+        
         setPreferredSize(new Dimension(500, 250));
         pack();
         setVisible(false);

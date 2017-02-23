@@ -148,6 +148,12 @@ public class main_code extends JFrame
     
     static JPanel team_list_panel=new JPanel(new GridBagLayout());
     
+    static JPanel team_comment_panel=new JPanel(new BorderLayout());
+    static JLabel team_comment_display=new JLabel("", SwingConstants.CENTER);
+    static JTextArea team_comment_edit=new JTextArea();
+    static JPanel edit_team_comment_panel=new JPanel(new FlowLayout());
+    static JButton edit_team_comment_button=new JButton("Edit Team Comment");
+    
     static JFrame review_frame=new JFrame();
     static JPanel main_review_panel=new JPanel(new GridLayout(0,1,5,5));
 
@@ -179,7 +185,14 @@ public class main_code extends JFrame
                         for (int i=0; i<character_unit.all_units.size(); i++){
                             character_unit.all_units.get(i).clear_unit();
                         }
+                        this_frame.match_frame.setVisible(false);
+                        this_frame.team_frame.setVisible(false);
+                        
                         this_frame.current_menu="new or load";
+                        
+                        this_frame.team_comment_edit.setText("");
+                        this_frame.team_comment_display.setText("");
+                        
                         this_frame.main_panel.removeAll();
                         this_frame.main_panel.add(new_team_button);
                         this_frame.main_panel.add(load_team_button);
@@ -243,106 +256,124 @@ public class main_code extends JFrame
                         int character_checker_index=0;
                         character_unit unit_loading=null;
                         int character_info_line=0;
+                        boolean loading_units=true;
+                        team_comment_display.setText("<html><body>");
                         
                         for (int i=0; fileArray.size()>i; i++){
-                            if (fileArray.get(i).compareTo("")==0){
-                                unit_loading=null;
-                                character_info_line=0;
+                            if (loading_units==true){
+                                if (fileArray.get(i).compareTo("")==0){
+                                    unit_loading=null;
+                                    character_info_line=0;
+                                }
+                                else{
+                                    
+                                    
+                                    if (character_info_line==0 || unit_loading==null){
+                                        //Figure out who the unit being loaded in is.
+                                        while (unit_loading==null && loading_units==true){
+                                            if (character_unit.all_units.get(character_checker_index).name.compareTo(fileArray.get(i))==0){
+                                                unit_loading=character_unit.all_units.get(character_checker_index);
+                                            }
+                                            else{
+                                                character_checker_index++;
+                                                if (character_checker_index==character_unit.all_units.size()){
+                                                    loading_units=false;
+                                                    team_comment_display.setText(team_comment_display.getText()+fileArray.get(i));
+                                                }
+                                            }
+                                        }
+                                        
+                                        if (loading_units!=false){
+                                            unit_loading.finished=true;
+                                        }
+                                    }
+                                    
+                                    
+                                    //Load Father or Mother or Spouse's name
+                                    if (character_info_line==1 && fileArray.get(i).compareTo("None")!=0){
+                                        int family_checker_index=0;
+                                            
+                                        if (unit_loading.is_parent==true){
+                                            while (((parent_unit)unit_loading).matched_with==null){
+                                                if (((parent_unit)unit_loading).marry_options.get(family_checker_index).name.compareTo(fileArray.get(i))==0){
+                                                    ((parent_unit)unit_loading).matched_with=((parent_unit)unit_loading).marry_options.get(family_checker_index);
+                                                    ((parent_unit)unit_loading).matched_with.matched_with=(parent_unit)unit_loading;
+                                                    
+                                                    if (((parent_unit)unit_loading).parent_of!=null){
+                                                        ((parent_unit)unit_loading).parent_of.add_parent2(((parent_unit)unit_loading).matched_with);
+                                                    }
+                                                    if (((parent_unit)unit_loading).matched_with.parent_of!=null){
+                                                        ((parent_unit)unit_loading).matched_with.parent_of.add_parent2((parent_unit)unit_loading);
+                                                    }
+                                                }
+                                                family_checker_index++;
+                                            }
+                                        }
+                                        if (unit_loading.is_parent!=true){
+                                            while (((child)unit_loading).flexable_parent==null){
+                                                if (((child)unit_loading).constant_parent.marry_options.get(family_checker_index).name.compareTo(fileArray.get(i))==0){
+                                                    ((child)unit_loading).constant_parent.matched_with=((child)unit_loading).constant_parent.marry_options.get(family_checker_index);
+                                                    ((child)unit_loading).constant_parent.matched_with.matched_with=((child)unit_loading).constant_parent;
+                                                    
+                                                    ((child)unit_loading).add_parent2(((child)unit_loading).constant_parent.matched_with);
+                                                        
+                                                    if (((child)unit_loading).constant_parent.matched_with.parent_of!=null){
+                                                        ((child)unit_loading).constant_parent.matched_with.parent_of.add_parent2(((child)unit_loading).constant_parent);
+                                                    }
+                                                }
+                                                family_checker_index++;
+                                            }
+                                        }
+                                    }
+                                        
+                                    //load class
+                                    if (character_info_line==2){
+                                        int class_checker_index=0;
+                                        while (unit_loading.info_frame.classes_to_become.size()==0){
+                                            if (unit_class.all_classes.get(class_checker_index).name.compareTo(fileArray.get(i))==0){
+                                                unit_loading.info_frame.classes_to_become.add(unit_class.all_classes.get(class_checker_index));
+                                            }
+                                            class_checker_index++;
+                                        }
+                                    }
+                                        
+                                    //load skills
+                                    if (character_info_line==3 && fileArray.get(i).compareTo("None")!=0){
+                                        int skills_line_index=0;
+                                            while (fileArray.get(i).substring(skills_line_index).contains("|")){
+                                            unit_loading.info_frame.skills_to_get.add(fileArray.get(i).substring(skills_line_index).substring(0, fileArray.get(i).substring(skills_line_index).indexOf("|")));
+                                            skills_line_index+=fileArray.get(i).substring(skills_line_index).indexOf("|")+1;
+                                        }
+                                        unit_loading.info_frame.skills_to_get.add(fileArray.get(i).substring(skills_line_index));
+                                    }
+                                        
+                                    //load comment
+                                    if (character_info_line==4 && fileArray.get(i).compareTo("None")!=0){
+                                        unit_loading.finished_frame.comment_label.setText(fileArray.get(i));
+                                    }
+                                        
+                                    //load if they were on the team
+                                    if (character_info_line==5){
+                                        if (fileArray.get(i).compareTo("true")==0){
+                                            unit_loading.finished_frame.add_to_team_button.doClick();
+                                        }
+                                            
+                                        unit_loading.info_frame.display_picked_classes();
+                                        unit_loading.info_frame.display_picked_skills();
+                                        
+                                        unit_loading.info_frame.pack();
+                                        unit_loading.finished_frame.update_frame();
+                                    }
+                                        
+                                    character_info_line++;
+                                }
                             }
-                            else{
-                                //Figure out who the unit being loaded in is.
-                                while (unit_loading==null){
-                                    if (character_unit.all_units.get(character_checker_index).name.compareTo(fileArray.get(i))==0){
-                                        unit_loading=father.all_units.get(character_checker_index);
-                                    }
-                                    else{
-                                        character_checker_index++;
-                                    }
-                                }
-                                
-                                if (character_info_line==0){
-                                    unit_loading.finished=true;
-                                }
-                                
-                                //Load Father or Mother or Spouse's name
-                                if (character_info_line==1 && fileArray.get(i).compareTo("None")!=0){
-                                    int family_checker_index=0;
-                                    
-                                    if (unit_loading.is_parent==true){
-                                        while (((parent_unit)unit_loading).matched_with==null){
-                                            if (((parent_unit)unit_loading).marry_options.get(family_checker_index).name.compareTo(fileArray.get(i))==0){
-                                                ((parent_unit)unit_loading).matched_with=((parent_unit)unit_loading).marry_options.get(family_checker_index);
-                                                ((parent_unit)unit_loading).matched_with.matched_with=(parent_unit)unit_loading;
-                                                
-                                                if (((parent_unit)unit_loading).parent_of!=null){
-                                                    ((parent_unit)unit_loading).parent_of.add_parent2(((parent_unit)unit_loading).matched_with);
-                                                }
-                                                if (((parent_unit)unit_loading).matched_with.parent_of!=null){
-                                                    ((parent_unit)unit_loading).matched_with.parent_of.add_parent2((parent_unit)unit_loading);
-                                                }
-                                            }
-                                            family_checker_index++;
-                                        }
-                                    }
-                                    if (unit_loading.is_parent!=true){
-                                        while (((child)unit_loading).flexable_parent==null){
-                                            if (((child)unit_loading).constant_parent.marry_options.get(family_checker_index).name.compareTo(fileArray.get(i))==0){
-                                                ((child)unit_loading).constant_parent.matched_with=((child)unit_loading).constant_parent.marry_options.get(family_checker_index);
-                                                ((child)unit_loading).constant_parent.matched_with.matched_with=((child)unit_loading).constant_parent;
-                                                
-                                                ((child)unit_loading).add_parent2(((child)unit_loading).constant_parent.matched_with);
-                                                
-                                                if (((child)unit_loading).constant_parent.matched_with.parent_of!=null){
-                                                    ((child)unit_loading).constant_parent.matched_with.parent_of.add_parent2(((child)unit_loading).constant_parent);
-                                                }
-                                            }
-                                            family_checker_index++;
-                                        }
-                                    }
-                                }
-                                
-                                //load class
-                                if (character_info_line==2){
-                                    int class_checker_index=0;
-                                    while (unit_loading.info_frame.classes_to_become.size()==0){
-                                        if (unit_class.all_classes.get(class_checker_index).name.compareTo(fileArray.get(i))==0){
-                                            unit_loading.info_frame.classes_to_become.add(unit_class.all_classes.get(class_checker_index));
-                                        }
-                                        class_checker_index++;
-                                    }
-                                }
-                                
-                                //load skills
-                                if (character_info_line==3 && fileArray.get(i).compareTo("None")!=0){
-                                    int skills_line_index=0;
-                                    while (fileArray.get(i).substring(skills_line_index).contains("|")){
-                                        unit_loading.info_frame.skills_to_get.add(fileArray.get(i).substring(skills_line_index).substring(0, fileArray.get(i).substring(skills_line_index).indexOf("|")));
-                                        skills_line_index+=fileArray.get(i).substring(skills_line_index).indexOf("|")+1;
-                                    }
-                                    unit_loading.info_frame.skills_to_get.add(fileArray.get(i).substring(skills_line_index));
-                                }
-                                
-                                //load comment
-                                if (character_info_line==4 && fileArray.get(i).compareTo("None")!=0){
-                                    unit_loading.finished_frame.comment_label.setText(fileArray.get(i));
-                                }
-                                
-                                //load if they were on the team
-                                if (character_info_line==5){
-                                    if (fileArray.get(i).compareTo("true")==0){
-                                        unit_loading.finished_frame.add_to_team_button.doClick();
-                                    }
-                                    
-                                    unit_loading.info_frame.display_picked_classes();
-                                    unit_loading.info_frame.display_picked_skills();
-                                    
-                                    unit_loading.info_frame.pack();
-                                    unit_loading.finished_frame.update_frame();
-                                }
-                                
-                                character_info_line++;
+                            else if (loading_units==false){
+                                team_comment_display.setText(team_comment_display.getText()+"<br>"+fileArray.get(i));
                             }
                         }
+                        
+                        team_comment_display.setText(team_comment_display.getText()+"</body></html>");
                         this_frame.current_menu="planning";
                         this_frame.main_panel.removeAll();
                         this_frame.main_panel.add(open_match_button);
@@ -352,6 +383,7 @@ public class main_code extends JFrame
                         
                         SwingUtilities.updateComponentTreeUI(this_frame);
                         this_frame.pack();
+                    
                     }
                         
                     catch (IOException e) {
@@ -469,67 +501,119 @@ public class main_code extends JFrame
         }
         );
         
+        edit_team_comment_button.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent event){
+                JButton source=(JButton)event.getSource();
+                
+                if (source.getText().contains("Edit")){
+                    JLabel_to_JTextArea(team_comment_display, team_comment_edit);
+                    
+                    team_comment_panel.remove(team_comment_display);
+                    team_comment_panel.add(team_comment_edit, BorderLayout.CENTER);
+                    source.setText("Done");
+                }
+                
+                else if (source.getText().contains("Done")){
+                    JTextArea_to_JLabel(team_comment_edit, team_comment_display);
+                    
+                    team_comment_panel.remove(team_comment_edit);
+                    team_comment_panel.add(team_comment_display, BorderLayout.CENTER);
+                    source.setText("Edit Team Comment");
+                }
+                
+                team_frame.pack();
+                SwingUtilities.updateComponentTreeUI(team_frame);
+        }
+        }
+        );
+        
         
         //Listener for the save button
         save_button.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent event){
-                String team_save_name=JOptionPane.showInputDialog(this_frame, "Please enter your team name.");
-                if (team_save_name.compareTo("")!=0 && team_save_name!=null){
-                    try{
-                        PrintWriter team_save_writer=new PrintWriter("saved_teams\\"+team_save_name+".txt", "UTF-8");
-                        
-                        
-                        for (int i=0; i<character_unit.all_units.size(); i++){
-                            if (character_unit.all_units.get(i).finished==true){
-                                //Save Unit's name
-                                team_save_writer.println(character_unit.all_units.get(i).name);
-                                
-                                //Save Unit's Father or Mother or Spouse
-                                if (character_unit.all_units.get(i).is_parent==true){
-                                    if (((parent_unit)character_unit.all_units.get(i)).matched_with!=null){
-                                        team_save_writer.println(((parent_unit)character_unit.all_units.get(i)).matched_with.name);
+                
+                JFileChooser save_selector=new JFileChooser();
+                save_selector.setCurrentDirectory(new File((new File("saved_teams")).getAbsolutePath()));
+                FileNameExtensionFilter file_filter = new FileNameExtensionFilter("Text files", "txt");
+                save_selector.setFileFilter(file_filter);
+                int file_picked=save_selector.showOpenDialog(this_frame);
+                
+                
+                if (file_picked==0){
+                    File file_to_load=save_selector.getSelectedFile();
+                    
+                    if (file_to_load.getName().compareTo("")!=0 && file_to_load.getName()!=null && file_to_load.getName().compareTo(".txt")!=0){
+                        try{
+                            PrintWriter team_save_writer;
+                            //If the given name has .txt already at the end.
+                            if (file_to_load.getName().substring(file_to_load.getName().length()-4).compareTo(".txt")==0){
+                                team_save_writer=new PrintWriter("saved_teams\\"+file_to_load.getName(), "UTF-8");
+                            }
+                            else{
+                                team_save_writer=new PrintWriter("saved_teams\\"+file_to_load.getName()+".txt", "UTF-8");
+                            }
+                            
+                            for (int i=0; i<character_unit.all_units.size(); i++){
+                                if (character_unit.all_units.get(i).finished==true){
+                                    //Save Unit's name
+                                    team_save_writer.println(character_unit.all_units.get(i).name);
+                                    
+                                    //Save Unit's Father or Mother or Spouse
+                                    if (character_unit.all_units.get(i).is_parent==true){
+                                        if (((parent_unit)character_unit.all_units.get(i)).matched_with!=null){
+                                            team_save_writer.println(((parent_unit)character_unit.all_units.get(i)).matched_with.name);
+                                        }
+                                        else{
+                                            team_save_writer.println("None");
+                                        }
+                                    }
+                                    else{
+                                        team_save_writer.println(((child)character_unit.all_units.get(i)).flexable_parent.name); //Finalized kids will always have a parent
+                                    }
+                                    
+                                    //Save Unit's class
+                                    team_save_writer.println(character_unit.all_units.get(i).info_frame.classes_to_become.get(0).name);
+                                    
+                                    //Save Unit's skills
+                                    if (character_unit.all_units.get(i).info_frame.skills_to_get.size()>0){
+                                        String skills_text_save=character_unit.all_units.get(i).info_frame.skills_to_get.get(0);
+                                        for (int ii=1; ii<character_unit.all_units.get(i).info_frame.skills_to_get.size(); ii++){
+                                            skills_text_save+="|"+character_unit.all_units.get(i).info_frame.skills_to_get.get(ii);
+                                        }
+                                        team_save_writer.println(skills_text_save);
                                     }
                                     else{
                                         team_save_writer.println("None");
                                     }
-                                }
-                                else{
-                                    team_save_writer.println(((child)character_unit.all_units.get(i)).flexable_parent.name); //Finalized kids will always have a parent
-                                }
-                                
-                                //Save Unit's class
-                                team_save_writer.println(character_unit.all_units.get(i).info_frame.classes_to_become.get(0).name);
-                                
-                                //Save Unit's skills
-                                if (character_unit.all_units.get(i).info_frame.skills_to_get.size()>0){
-                                    String skills_text_save=character_unit.all_units.get(i).info_frame.skills_to_get.get(0);
-                                    for (int ii=1; ii<character_unit.all_units.get(i).info_frame.skills_to_get.size(); ii++){
-                                        skills_text_save+="|"+character_unit.all_units.get(i).info_frame.skills_to_get.get(ii);
+                                    
+                                    //Save Unit's comment
+                                    if (character_unit.all_units.get(i).finished_frame.comment_label.getText()!=null && character_unit.all_units.get(i).finished_frame.comment_label.getText()!=""){
+                                        team_save_writer.println(character_unit.all_units.get(i).finished_frame.comment_label.getText());
                                     }
-                                    team_save_writer.println(skills_text_save);
+                                    else{
+                                        team_save_writer.println("None");
+                                    }
+                                    
+                                    //Save if Unit is on the team 
+                                    team_save_writer.println(Boolean.toString(units_on_team.contains(character_unit.all_units.get(i))));
+                                    
+                                    team_save_writer.println();
                                 }
-                                else{
-                                    team_save_writer.println("None");
-                                }
-                                
-                                //Save Unit's comment
-                                if (character_unit.all_units.get(i).finished_frame.comment_label.getText()!=null && character_unit.all_units.get(i).finished_frame.comment_label.getText()!=""){
-                                    team_save_writer.println(character_unit.all_units.get(i).finished_frame.comment_label.getText());
-                                }
-                                else{
-                                    team_save_writer.println("None");
-                                }
-                                
-                                //Save if Unit is on the team 
-                                team_save_writer.println(Boolean.toString(units_on_team.contains(character_unit.all_units.get(i))));
-                                
-                                team_save_writer.println();
                             }
+                            
+                            if (team_comment_edit.getText().compareTo("")==0){
+                                JLabel_to_JTextArea(team_comment_display, team_comment_edit);
+                            }
+                            team_save_writer.println(team_comment_edit.getText());
+                            
+                            
+                            
+                            
+                            team_save_writer.close();
                         }
-                        team_save_writer.close();
-                    }
-                    catch (IOException e) {
-                        System.out.println(e);
+                        catch (IOException e) {
+                            System.out.println(e);
+                        }
                     }
                 }
                 
@@ -537,9 +621,18 @@ public class main_code extends JFrame
         }
         );
         
+        edit_team_comment_panel.add(edit_team_comment_button);
+        team_comment_panel.add(team_comment_display, BorderLayout.CENTER);
+        team_comment_panel.add(edit_team_comment_panel, BorderLayout.SOUTH);
+        
+        
+        
         team_panel.add(team_progress_label, BorderLayout.NORTH);
         team_panel.add(team_list_panel, BorderLayout.CENTER);
+        team_panel.add(team_comment_panel, BorderLayout.SOUTH);
         team_frame.add(team_panel);
+        
+        
         
         team_frame.setPreferredSize(new Dimension(400, 1000));
         team_frame.setLocation((int)java.awt.Toolkit.getDefaultToolkit().getScreenSize().getWidth()-400, 0);
@@ -571,6 +664,41 @@ public class main_code extends JFrame
         team_frame.pack();
         
     }
+    
+    
+    //Converts the text in a JLabel to a JTextArea
+    public static void JLabel_to_JTextArea(JLabel label, JTextArea textArea){
+        textArea.setText("");
+        int text_index=0;
+        if (label.getText().contains("<html><body>")){
+            text_index+=12;
+        }
+        while (label.getText().substring(text_index).contains("<br>")){
+            String temp_text=label.getText().substring(text_index, text_index+label.getText().substring(text_index).indexOf("<br>"))+"\n";
+            textArea.setText(textArea.getText()+temp_text);
+            text_index+=temp_text.length()+3;
+        }
+        if (label.getText().contains("</body></html>")){
+            textArea.setText(textArea.getText()+label.getText().substring(text_index, label.getText().length()-14));
+        }
+        else{
+            textArea.setText(textArea.getText()+label.getText().substring(text_index));
+        }
+    }
+    
+    //Converts the text in a JTextArea to a JLabel
+    public static void JTextArea_to_JLabel(JTextArea textArea, JLabel label){
+        label.setText("<html><body>");
+        int text_index=0;
+        while (textArea.getText().substring(text_index).contains("\n")){
+            String temp_text=textArea.getText().substring(text_index, text_index+textArea.getText().substring(text_index).indexOf("\n"))+"<br>";
+            label.setText(label.getText()+temp_text);
+            text_index+=temp_text.length()-3;
+        }
+        
+        label.setText(label.getText()+textArea.getText().substring(text_index)+"</body></html>");
+    }
+    
     
     
     //Creates the panel on the matching menu which displays who is matched with who, by drawing a line to connect them

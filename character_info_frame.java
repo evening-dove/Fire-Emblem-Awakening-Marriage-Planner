@@ -220,8 +220,15 @@ public abstract class character_info_frame extends JFrame
         build_bottom_panel.add(extra_options_panel, BorderLayout.CENTER);
         build_bottom_panel.add(info_panel, BorderLayout.SOUTH);
         
-        
         add(main_panel);
+        
+        
+        addComponentListener(new ComponentAdapter() {
+            public void componentResized(ComponentEvent event) {
+                this_frame.setPreferredSize(this_frame.getSize());
+            }
+        }
+        );
         
         setPreferredSize(new Dimension(1050, 800));
         

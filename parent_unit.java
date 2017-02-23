@@ -53,6 +53,7 @@ public abstract class parent_unit extends character_unit
         info_frame=new parent_info_frame(this, true);
     }
     
+    
     public void clear_unit(){
         matched_with=null;
         
@@ -66,9 +67,11 @@ public abstract class parent_unit extends character_unit
         info_frame.picked_stats_panel.removeAll();
         info_frame.picked_skills_panel.removeAll();
         info_frame.pack();
+        info_frame.setVisible(false);
         
         main_code.units_on_team.remove(this);
         finished_frame.add_to_team_button.setText("Add to Team");
+        finished_frame.setVisible(false);
         main_code.update_team();
         
         main_code.update_team();

@@ -95,6 +95,7 @@ public class child extends character_unit
     
     public void clear_unit(){
         remove_parent2();
+        info_frame.setVisible(false);
     }
     
     
